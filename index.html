@@ -1,0 +1,427 @@
+<html>
+    
+<!-- Mirrored from nijhof.biz/twd/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 Aug 2017 11:37:06 GMT -->
+<head>
+        <title>Tower Defense</title>
+
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+
+
+        <script type="text/javascript" src="./webgl/m4.js"></script>
+        <script type="text/javascript" src="./webgl/webgl-utils.js"></script>
+
+
+        <script id="drawImage-vertex-shader" type="x-shader/x-vertex">
+            attribute vec4 a_position;
+            attribute vec2 a_texcoord;
+
+            uniform mat4 u_matrix;
+
+            varying vec2 v_texcoord;
+
+            void main() {
+               gl_Position = u_matrix * a_position;
+               v_texcoord = a_texcoord;
+            }
+            </script>
+            <script id="drawImage-fragment-shader" type="x-shader/x-fragment">
+            precision mediump float;
+
+            varying vec2 v_texcoord;
+
+            uniform sampler2D u_texture;
+
+            void main() {
+               gl_FragColor = texture2D(u_texture, v_texcoord);
+            }
+        </script>
+
+        <script type="text/javascript" src="weapon.js"></script>
+        <script type="text/javascript" src="turret.js"></script>
+        <script type="text/javascript" src="enemytank.js"></script>		
+        <script type="text/javascript" src="images.js"></script>
+		<script type="text/javascript" src="eventhandlers.js"></script>		
+		<script type="text/javascript" src="grid.js"></script>
+		<script type="text/javascript" src="loop.js"></script>
+        <script type="text/javascript" src="menu.js"></script>
+        <script type="text/javascript" src="turretbullet.js"></script>
+        <script type="text/javascript" src="rocketlauncher.js"></script>
+        <script type="text/javascript" src="rocket.js"></script>
+        <script type="text/javascript" src="main.js"></script>        
+        <script type="text/javascript" src="explosion.js"></script>
+        <script type="text/javascript" src="nuclearbullet.js"></script>
+        <script type="text/javascript" src="nuclearlauncher.js"></script>
+
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+
+        <style>
+
+            body {
+                font-family: 'Roboto', sans-serif;
+
+            -webkit-user-select: none;
+     -moz-user-select: -moz-none;
+      -ms-user-select: none;
+          user-select: none;
+
+            }
+            /* The Modal (background) */
+            .modal {
+                display: none;
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 5%;
+                top: 10%;
+                width: 90%; /* Full width */
+                height: 85%; /* Full height */
+
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.75); /* Black w/ opacity */
+                background: rgba(0, 0, 0, 0.75);
+                border-radius: 10px;
+                color:white;
+            }
+
+            @media all and (orientation: landscape) { 
+                .box
+                {
+                    width: 50%;
+                    top: 50px;
+                    bottom:50px;
+                    overflow-y: scroll;
+                    float:left;
+                    height:100%;
+                }   
+
+				.menu {
+					position: fixed; /* Stay in place */
+					z-index: 1; /* Sit on top */
+					right: 0px;
+					bottom: 0px;
+					width: 100%; /* Full width */
+					height: 100%; /* Full height */      
+					max-width:50px;;
+					color:white;
+				}
+				
+				.menu img{
+				   float:right;
+				   width:100%;
+				   margin-bottom:10px;
+				}
+            }
+
+            .full-box
+            {
+                width: 100%;
+                top: 50px;
+                bottom:50px;
+                overflow-y: scroll;
+                height:100%;
+            }
+
+            .modal-content
+            {
+                    top: 50px;
+                    bottom: 50px;
+                    position: absolute;
+                    width: 96%;
+                    margin:2%;
+
+            }
+
+            .modal-footer
+            {
+                position:absolute;
+                height:50px;
+                bottom:0px;
+                width:96%;
+                margin:2%;
+            }
+
+            .modal-header
+            {
+                position:absolute;
+                height:50px;
+                top:0px;
+                width:96%;
+                margin:2%;
+                font-size: 16pt;
+                font-weight: bold;
+            }
+
+            
+
+            .accept-button {
+                 background-size: 40px 40px;
+                 height: 40px;  
+                 float:right;
+                 width: 40px;
+                 outline-style: none;
+                 border:none;
+
+                background-color:rgba(0, 0, 0, 0);
+                background-image: url("images/accept_button.png");
+            }
+
+            .close-button {
+                background-size: 40px 40px;
+                height: 40px;  
+                float:right;
+                width: 40px;
+                outline-style: none;
+                border:none;
+
+                background-color:rgba(0, 0, 0, 0);
+                background-image: url("images/close_blue.png");
+            }           
+
+            .button {
+                background-color: blue; /* Green */
+                border: none;
+                color: white;                
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                border-radius:1em;
+            }
+
+            @media all and (orientation: portrait) { 
+                .box
+                {
+                    width: 100%;
+                    overflow-y: scroll;
+                    float:left;
+                    top:50px;
+                    bottom:50px;
+                    height:50%;
+                }
+
+				.menu {
+					position: fixed; /* Stay in place */
+					z-index: 1; /* Sit on top */
+					left: 0px;
+					bottom: 0px;
+					width: 100%; /* Full width */
+					height: 10%; /* Full height */      
+					max-height:50px;;
+					color:white;
+				}
+				
+				.menu img{
+				   float:right;
+				   margin-left:10px;
+				   height:100%;
+				}
+            }
+
+            .upgrade-left
+            {
+                float:left;
+                font-size:20pt;
+                margin-right:5px;
+            }
+
+             .upgrade-right
+             {
+                float:right;
+                font-size:20pt;
+                margin-right:5px;
+            }
+
+            .summary {
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 5px;
+                top: 5px;
+                width: 50px; /* Full width */
+                height: 20px; /* Full height */                
+                color:white;
+            }	
+			
+
+            .upgradeBtn {
+                    height: 30px;
+                    background: rgba(0, 0, 0, 0.75);
+                    font-size: 12pt;
+                    text-align: center;
+                    line-height: 30px;
+                    width: 140px;
+					background:url(./images/upgrade_button.png) no-repeat;
+					background-size: 100% 100%;
+            }
+			
+			.upgradeBtn:disabled {
+				
+			}
+			
+			.upgradeBtn:disabled,
+			.upgradeBtn[disabled]{
+			  opacity:0.5;
+			}
+
+
+			
+			
+			
+			
+
+
+        </style>
+
+    </head>
+    <body onresize="resizeCanvas()" style="margin:0px">
+		<canvas id="canvasImageProvider" style="display:none;" width="50" height="50"></canvas>
+		<canvas id="towerDefenseView" ></canvas>
+
+
+         <div id="" class="summary" style="pointer-events:none;">
+            <div style="float:left;"><img src ="images/money.png" width="12" height="12" style="float:left;margin-top:3px;" /></div>
+            <div id ="pocket" style="float:left;margin-left:3px;">0</div>
+         </div>
+		 
+		 <div class="menu" style="background: rgba(0, 0, 0, 0.5);">
+			<img src="./images/menu.svg" style="" />
+            <img src="./images/build.svg" style="" />
+			<img src="./images/play.svg" id="gamestate" onclick="twdEventHandlers.changePause()" style="" />			
+			<img src="./images/speed-level-1.svg" id="gamespeed" onclick="twdEventHandlers.changeSpeed()"  style="" />
+		 </div>
+		 
+        <div id="modal-level" class="modal" style="display:none;">
+            <div class="modal-header">   
+               <div class="upgrade-left">Pick a map!</div>
+                <button class="close-button" onclick="twdEventHandlers.closeBuildModal(this)"></button>        
+            </div>
+            <div class="modal-content">
+                <div class="full-box" id = "levels">
+
+                </div>
+            </div>
+            <div class="modal-footer">                                      
+                <button class="accept-button" onclick="twdEventHandlers.buildTurret(this)"></button>        
+            </div>   
+        </div>
+
+        <div id="modal-build" class="modal">
+          <!-- Modal content -->
+            <div class="modal-header">   
+               <div class="upgrade-left">Build a turret!</div>
+                <button class="close-button" onclick="twdEventHandlers.closeBuildModal(this)"></button>        
+            </div>
+            <div class="modal-content"> 
+                <div class="box" id = "turrets">
+
+                </div>  
+                <div class="box">
+                    <div id="speedrow" style="height:45; ">
+                        <div id ="speedimage" class="upgrade-left" >
+                            <img src ="images/speed.png"  width="30" height="30" />
+                        </div>
+                        <div id ="speedvalue" class="upgrade-left">0</div>
+                        <div id ="speedplusmin" class="upgrade-left" onclick="twdEventHandlers.plusSpeed()" style="margin-right:0px;float:right;">
+                            <div id = "upgrade" class="upgradeBtn" disabled>
+                                <div style="margin-left:5px;float:left;">Upgrade</div> 
+
+                                <div style="float:right;display: flex;justify-content: center;height:30px;width:30px;">
+                                    <img  src ="images/money.png" style="align-self:center" width="16" height="16" />
+                                </div>
+                                <div style="float:right;" id ="speedCost">
+                                    0
+                                </div>
+                            </div>
+                        </div>                     
+                    </div>
+                    <div id="powerrow" style="height:45;">
+                        <div id ="powerimage" class="upgrade-left" >
+                            <img src ="images/power.png" width="30" height="30" />
+                        </div>
+                        <div id ="powervalue" class="upgrade-left">0</div>
+                        <div id ="speedplusmin" class="upgrade-left" onclick="twdEventHandlers.plusPower()" style="margin-right:0px;float:right;">
+                            <div id = "upgrade" class="upgradeBtn" disabled>
+                                <div style="margin-left:5px;float:left;">Upgrade</div> 
+
+                                <div style="float:right;display: flex;justify-content: center;height:30px;width:30px;">
+                                    <img  src ="images/money.png" style="align-self:center" width="16" height="16" />
+                                </div>
+                                <div style="float:right;" id ="powerCost">
+                                    0
+                                </div>
+                            </div>
+                        </div>    
+
+                    </div>
+                    <div id="rangerow" style="height:45;">
+                        <div id ="rangeimage" class="upgrade-left">
+                            <img src ="images/range.png" width="30" height="30" />
+                        </div>
+                        <div id ="rangevalue" class="upgrade-left">0</div>
+                        <div id ="speedplusmin" class="upgrade-left" onclick="twdEventHandlers.plusRange()" style="margin-right:0px;float:right;">
+                            <div id = "upgrade" class="upgradeBtn" disabled>
+                                <div style="margin-left:5px;float:left;">Upgrade</div> 
+
+                                <div style="float:right;display: flex;justify-content: center;height:30px;width:30px;">
+                                    <img  src ="images/money.png" style="align-self:center" width="16" height="16" />
+                                </div>
+                                <div style="float:right;" id ="rangeCost">
+                                    0
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                    <div id="speedrow" style="height:45;display:none;">
+                        <div id ="speedimage" class="upgrade-left" >
+                            <img src ="images/speed.png"  width="30" height="30" />
+                        </div>
+                        <div id ="speedvalue" class="upgrade-left">0</div>
+                        <div id ="speedplusmin" class="upgrade-left" style="margin-right:0px;">
+                            <img src ="images/minus.png" onclick="twdEventHandlers.minusSpeed()" width="30" height="30" />
+                            <img src ="images/plus.png" onclick="twdEventHandlers.plusSpeed()" width="30" height="30" />
+                        </div>
+                        <div id ="rangeimage" class="upgrade-right">
+                            <img src ="images/money.png" width="30" height="30" />
+                        </div>
+                        <div id ="speedCost2" class="upgrade-right">0</div>
+                    </div>
+                    <div id="powerrow" style="height:45;display:none;">
+                        <div id ="powerimage" class="upgrade-left" >
+                            <img src ="images/power.png" width="30" height="30" />
+                        </div>
+                        <div id ="powervalue" class="upgrade-left">0</div>
+                        <div id ="powerplusmin" class="upgrade-left" style="margin-right:0px;">
+                            <img src ="images/minus.png" onclick="twdEventHandlers.minusPower()"   width="30" height="30" />
+                            <img src ="images/plus.png" onclick="twdEventHandlers.plusPower()" width="30" height="30" />
+                        </div>
+                        <div id ="rangeimage" class="upgrade-right">
+                            <img src ="images/money.png" width="30" height="30" />
+                        </div>
+                        <div id ="powerCost2" class="upgrade-right">0</div>
+
+                    </div>
+                    <div id="rangerow" style="height:45;display:none;">
+                        <div id ="rangeimage" class="upgrade-left">
+                            <img src ="images/range.png" width="30" height="30" />
+                        </div>
+                        <div id ="rangevalue" class="upgrade-left">0</div>
+                        <div id ="rangeplusmin" class="upgrade-left" style="margin-right:0px;">
+                            <img src ="images/minus.png" onclick="twdEventHandlers.minusRange()" width="30" height="30" />
+                            <img src ="images/plus.png" onclick="twdEventHandlers.plusRange()" width="30" height="30" />
+                        </div>
+                        <div id ="rangeimage" class="upgrade-right">
+                            <img src ="images/money.png" width="30" height="30" />
+                        </div>
+                        <div id ="rangeCost2" class="upgrade-right">0</div>
+                    </div>
+                </div>                 
+            </div>     
+            <div class="modal-footer">   
+                <div class="upgrade-left">Total:</div> <div class="upgrade-left" id="totalcost">0</div>                      
+                <button class="accept-button" onclick="twdEventHandlers.buildTurret(this)"></button>        
+            </div>    
+    </body>
+
+<!-- Mirrored from nijhof.biz/twd/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 Aug 2017 11:37:10 GMT -->
+</html>
