@@ -90,6 +90,11 @@ function Menu()
             turret = new NuclearLauncher(this.buildx, this.buildy, 2);
         }
 
+        if(this.buildIndex == 3)
+        {
+            turret = new MultiRocketLauncher(this.buildx, this.buildy, 3);
+        }
+
         if(turret != null)
         {
             turret.rangeLevel = this.rangeLevel;

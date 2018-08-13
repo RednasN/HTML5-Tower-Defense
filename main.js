@@ -176,7 +176,7 @@ function setup()
         twdGameLoop.start();
         interval(function(){
              twdGrid.enemies.push(new EnemyTank(0, 150, 5));
-        }, 1, 1);  
+        }, 1000,15);  
 
         interval(function(){
             

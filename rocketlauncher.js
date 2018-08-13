@@ -19,8 +19,9 @@ class RocketLauncher extends Weapon {
     }
 
     shoot() {
-        var item = this.canons[Math.floor(Math.random()*this.canons.length)];
-        twdGrid.bullets.push(new Rocket(this.gridX, this.gridY, this.focusedIndex, 1, item, this.damage));
+        var angle = this.canons[Math.floor(Math.random()*this.canons.length)];
+        
+        twdGrid.bullets.push(new Rocket(this.gridX, this.gridY, this.focusedIndex, 1, angle, this.damage));
     }
 
     calculate() {      

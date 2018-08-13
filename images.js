@@ -23,6 +23,7 @@ var image_selected_square = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAA
 
 var nuclear_turret = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABqElEQVRoQ+2ZS4rDMAyG1U0hq4EeovfoZQZ6ooG5TO/RQxS6CsymxRkr2CJOZUuiE4+6q+OHPv+KJDs76OS364QDHOSvKemKuCJGO+Cu9WpjR4DHUp8BbCKliSIlCASzgDEBAYDHWJBs+G1XX1dzwtmV9nCerL3DV4bzEdt/8nYVG1QmCQqg8VQIhEEI+jxCie2QTjCpUIJ4FRDweaJQsz3NA9dU4AJoqtMKUnSlVgiiTrVd1QPigl2AmEFIVKlVxByiFeZfgqiEWm4wqM0vbEVC/VRKaqUMvmQ0py/J/Gvss/0sECwCl0CCYcPnLVts/D6ApG8AOV7WTbueJgfhg6SVLDVuCQKJKExNX3UQWo47SKyEqQuW1FNXJCzUhWvNOxaPrZIXGM8nnMBgokgKs/nwi4Wixtnj7QnRuuqVnk1YCTFZpJuiMTCZw9TWWVmK5/qutYu1QDiIlSqtakgUQU9UOaO8+zoofa02f0GXweCfLV+Z0qC36UvsGaanzwpZ+Z/KZfFtRCNqVeZRu+61tZadJcKZHUS4gerDXRH1LRVO6IoIN1B9+BNabMYzakKC0QAAAABJRU5ErkJgggAA";
 
+var multilauncher = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAACSUlEQVRoQ92ZOVLDMBSG5aSl4CzM+BAcKhThUBzCMzkLBW0wY2MLbW/Viy2cKoVk/Z/eKqlzB/l1B+FwJZAxgWsFFtWVikwHr0x7w5C6QoHQ4L1hWLokIBOQmWVG51CB3e9aFITXJAUxgaEghIvMDBoQ4Tpx6uBACBfIQKb5HFOqYyaFOH/Fy92f/vaV6cN+GCf9+i0dLyd92Xn/zuZWgkTaIfDMMlUQE4ItSKYbs6CHqYawBSlqplxxNIEAQDA/BYSBelGQ8XKSBD8aP8/XOEY+kZWlEGSW2wNEA9EciBaiKZAaiE1BSuk3DKoCCJWIopjcLNiFICKIaov0Hy9+V4bXG171CwWR2yYsnTA6XGWRFWAYBv/xvu/n/yBQBUhKUALbHATrr7gWCrpWtGkMm8SsIEbuVLAIaJXFIs2AuOs9c6dZfADl3s755hIgKeD6gbC1x1xM7lo7gaygyZlF71qHschxYsQ5V5N+2wn2ShBpii2NN6sj68f/fWVX7SpR2Zf0I+6xguIIy7I8WAmaRhWMvI6ozOEcddRNhIhhWgUhO/NCld/GtSiLAMrZlmnGIkjQsmDIQWYBLziPaI69JMh0sW1ySScA0bgZBWJ3bWpz96u6abS9yLYBAbMZRCi5KqWsOsdx6YGn4lkhW7MkwhxizUjGDz2R9hTkYRAQDFTFWGYOng7D8Q+HkMAwQXzMaEAEayBdA/08ze3qZj1SEBMIrkLm46wYZGuIwBNR9AxkyZLFSXtBUDBeFyf97g0BwaDpV+C+bQ39AQIUIEKu91lwAAAAAElFTkSuQmCC";
 
 //var images = [];
 //images[] = 
@@ -328,6 +329,9 @@ function TowerDefenseImages()
 
 		calculateRotateImages("NuclearLauncher", nuclear_turret, this.towers);
 		this.addTower(nuclear_turret, 2, 100);
+
+		calculateRotateImages("MultiRocketLauncher", multilauncher, this.towers);
+		this.addTower(multilauncher, 3, 100);
 	};
 
 	this.addTower = function (src, index, moneys){

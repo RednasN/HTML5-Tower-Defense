@@ -13,6 +13,7 @@ class Weapon {
       this.damage = 0;
 
       this.focusedIndex = -1;
+      this.focusedIndexes = [];
 
       this.rangeLevel = 0;
       this.powerLevel = 0;
@@ -33,6 +34,20 @@ class Weapon {
             if (this.lastFired > this.speed - ((this.speedLevel * 10) * (this.speed / 100))) {
                 this.shoot();
                 this.lastFired = 0;
+            }
+        }
+    }
+
+    findClosests()
+    {
+        if(this.focusedIndexes.length == 0)
+        {
+            for(var i = 0; i < twdGrid.enemies.length; i++)
+            {
+                if(this.isInRange(i))
+                {
+                    this.focusedIndexes.push(i);
+                }
             }
         }
     }
