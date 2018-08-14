@@ -25,6 +25,8 @@ var nuclear_turret = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYA
 
 var multilauncher = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAACSUlEQVRoQ92ZOVLDMBSG5aSl4CzM+BAcKhThUBzCMzkLBW0wY2MLbW/Viy2cKoVk/Z/eKqlzB/l1B+FwJZAxgWsFFtWVikwHr0x7w5C6QoHQ4L1hWLokIBOQmWVG51CB3e9aFITXJAUxgaEghIvMDBoQ4Tpx6uBACBfIQKb5HFOqYyaFOH/Fy92f/vaV6cN+GCf9+i0dLyd92Xn/zuZWgkTaIfDMMlUQE4ItSKYbs6CHqYawBSlqplxxNIEAQDA/BYSBelGQ8XKSBD8aP8/XOEY+kZWlEGSW2wNEA9EciBaiKZAaiE1BSuk3DKoCCJWIopjcLNiFICKIaov0Hy9+V4bXG171CwWR2yYsnTA6XGWRFWAYBv/xvu/n/yBQBUhKUALbHATrr7gWCrpWtGkMm8SsIEbuVLAIaJXFIs2AuOs9c6dZfADl3s755hIgKeD6gbC1x1xM7lo7gaygyZlF71qHschxYsQ5V5N+2wn2ShBpii2NN6sj68f/fWVX7SpR2Zf0I+6xguIIy7I8WAmaRhWMvI6ozOEcddRNhIhhWgUhO/NCld/GtSiLAMrZlmnGIkjQsmDIQWYBLziPaI69JMh0sW1ySScA0bgZBWJ3bWpz96u6abS9yLYBAbMZRCi5KqWsOsdx6YGn4lkhW7MkwhxizUjGDz2R9hTkYRAQDFTFWGYOng7D8Q+HkMAwQXzMaEAEayBdA/08ze3qZj1SEBMIrkLm46wYZGuIwBNR9AxkyZLFSXtBUDBeFyf97g0BwaDpV+C+bQ39AQIUIEKu91lwAAAAAElFTkSuQmCC";
 
+var imgSurrounderSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAA2klEQVRoQ+2aywrCMBBFbygogj/kzk935w8JolAiXQRKfUAwY2/kdJNdyeSeOVlMUpbyfZQ2g9Tzmm6jcu9FTPtPJGKG41Mix6t02knu67IdXvaIexFlf/NiSMQBv6pEtoOSDL7DRXl+eNU9ct57FDLdd8veJZE1CSOR0lj0SGMOsVZRHfdIY7SwFtZqjFT5HdbCWkFoYS2sFYQW1sJaQWhhLawVhBbWwlpBaGEtrBWEFtbCWkFofW0t18Fo9cTKYVb47jCrJlYk8oNHBx8T6fWBDa+D3JL7m0Qe7HvOOT05TSIAAAAASUVORK5CYII=";
+
 //var images = [];
 //images[] = 
 
@@ -47,6 +49,7 @@ function TowerDefenseImages()
 	this.imgBlackTransparent = null;
 	this.imgMinButton = null;
 	this.imgPlusButton = null;
+	this.imgSurrounder = null;
 
 	var imageCanvas = document.getElementById("canvasImageProvider");
 
@@ -102,6 +105,11 @@ function TowerDefenseImages()
 	        saveImage.src = imageCanvas.toDataURL();
         };
         image.src = imagesrc;
+	}
+
+	function calculate()
+	{
+
 	}
 
 	function setImageValue(gridImage)
@@ -301,7 +309,12 @@ function TowerDefenseImages()
 			twdImages.imgBlackTransparent = value;
 		}
 
+		function set4(value)	{
+			twdImages.imgSurrounder = value;
+		}
+
 		calculateImage(imgBlackTransparentSrc, set1);
+		calculateImage(imgSurrounderSrc, set4);
 
 
 	};

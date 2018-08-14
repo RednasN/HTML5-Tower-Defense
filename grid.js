@@ -24,6 +24,8 @@ function TowerDefenseGrid()
 	this.height = null;
 	this.width = null;
 	
+	this.selectedCell = null;
+
 	this.setupOpenGrid = function(startx, starty, endx, endy, widthx, widthy, height, width) {
 		this.startx = startx;
 		this.starty = starty;
@@ -63,6 +65,20 @@ function TowerDefenseGrid()
 		}
 
 	};
+
+	this.drawAssets = function ()
+	{
+		if(this.selectedCell != null)
+		{
+			var drawAssetx = this.selectedCell.drawx + mainCanvasXOffset;
+	  		var drawAssety = this.selectedCell.drawy + mainCanvasYOffset;
+	  
+			twdGrid.render(twdImages.imgSurrounder, drawAssetx, drawAssety);
+		}
+		//twdImages.towers[this.imageIndex].images[Math.round(this.angle)], this.startx, this.starty
+		//Draw selected field.
+		//console.log(this.selectedCell);
+	}
 
 	this.calculateEnemies = function ()
 	{

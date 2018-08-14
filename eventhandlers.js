@@ -132,6 +132,27 @@ function EventHandlers()
 		twdMenu.build();
 	};
 
+	this.showBuild = function () {
+		var nowClickedCell = twdGrid.selectedCell;
+
+		if(nowClickedCell != null)
+		{
+			twdMenu.buildx = nowClickedCell.x;
+			twdMenu.buildy = nowClickedCell.y;
+
+			document.getElementById("speedvalue").innerHTML = 0;
+			document.getElementById("rangevalue").innerHTML = 0;
+			document.getElementById("powervalue").innerHTML = 0;
+			document.getElementById("totalcost").innerHTML = 0;
+			twdMenu.towercost = 0;
+			twdMenu.buildIndex = -1;
+
+			calculateUpgradeCosts();
+
+			document.getElementById("modal-build").style.display = "block";
+		}
+	}
+
 	this.setupMainHandlers = function() {
 
 		var lastClicked = null;
@@ -148,7 +169,11 @@ function EventHandlers()
             {
             	console.log("Single click");
 
-            	console.log(getClickedCell());
+				var cell = getClickedCell();
+				
+				twdGrid.selectedCell = cell;
+				//twdGrid.selectedCell = cell;
+				//twdgrid.selected
             }
 
             function getClickedCell()

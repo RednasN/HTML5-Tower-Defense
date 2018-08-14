@@ -40,7 +40,7 @@ function MultiRocket(x, y, enemyIndex, bulletIndex, angle, damage, fixedangletim
 
     this.draw = function ()
     {
-        if(this.needdraw)
+        if(this.needdraw && this.shootingDelay < 0)
         {
             try
             {
@@ -56,8 +56,14 @@ function MultiRocket(x, y, enemyIndex, bulletIndex, angle, damage, fixedangletim
 
     this.calculate = function() {
 
-        if(this.needdraw)
+        this.shootingDelay -= twdGameLoop.delta * 1000;
+
+        
+
+        if(this.needdraw && this.shootingDelay < 0)
         {
+
+            //console.log('Delay!' );
         var centerEnemyX = twdGrid.enemies[this.enemyIndex].drawx + 25;
         var centerEnemyY = twdGrid.enemies[this.enemyIndex].drawy + 25;
 
@@ -70,7 +76,10 @@ function MultiRocket(x, y, enemyIndex, bulletIndex, angle, damage, fixedangletim
         var rad = Math.atan2(deltaY, deltaX); // In radians
         var angle = Math.round(rad * 180 /  Math.PI + 180);
 
-        this.fixedangletime -= twdGameLoop.delta;
+        this.fixedangletime -= twdGameLoop.delta * 1000;
+        
+
+        
             //console.log(this.angle);
         //console.log(this.fixedangletime);
 

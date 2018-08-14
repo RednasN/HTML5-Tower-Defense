@@ -74,11 +74,12 @@ function GameLoop()
 			twdGrid.draw();
 			//console.log("Draw!");
 
-			
+			twdGrid.drawAssets();
 			twdGrid.drawTurrets();
 			twdGrid.drawEnemies();
 			twdGrid.drawExplosions();
 			twdGrid.drawBullets();
+			
 		}
 
 		//twdMenu.draw();
