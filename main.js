@@ -1,7 +1,10 @@
+
 var TO_RADIANS = Math.PI / 180; 
 
 
 var DRAWMODE = "Canvas";
+//var DRAWMODE = "WebGL";
+
 
 //Default values
 var drawScale = 1;
@@ -16,6 +19,10 @@ var twdEventHandlers = null;
 var twdGrid = null;
 var twdGameLoop = null;
 var twdMenu = null;
+var twdContent = null;
+var twdGame = null;
+var twdGraphics = null;
+var twdCalculate = null;
 
 var scaleToFit = 1;
 
@@ -33,6 +40,8 @@ var positionBuffer;
 var positions;
 var texcoordBuffer;
 var texcoords;
+
+
 
 var test = [];
 
@@ -94,9 +103,6 @@ window.onload = function () {
         mainCtx.blendFunc(mainCtx.SRC_ALPHA, mainCtx.ONE_MINUS_SRC_ALPHA);
         mainCtx.enable(mainCtx.BLEND);
 
-
-
-
         mainCtx.useProgram(program);
 
         // Setup the attributes to pull data from our buffers
@@ -109,88 +115,292 @@ window.onload = function () {
     }
 
   resizeCanvas();
-  setup();
+
+  console.log("Load..");
+  twdContent = new TowerDefenseContent();
+
+    twdContent.loadContent("https://nijhof.biz/twd_game/get_images.php", function(err, data) {
+
+        if (err !== null) {
+            alert('Error loading content: ' + err);
+        } else 
+        {
+            setup(data);
+        }
+    });
+
 };
 
 var userLang = navigator.language || navigator.userLanguage; 
 
+class Turret2
+{
+    constructor()
+    {
+        this.image = null;
+    }
+}
+
+
+
+
 
 //alert(userLang);
 
-function setup()
-{
-	twdImages = new TowerDefenseImages();
-	twdImages.setupTowers();
-	twdImages.setupEnemies();
-	twdImages.setupBullets();    
-	twdImages.setupAssets(); 
-    twdImages.setupGridImages();
-    twdImages.setupExplosions();
+async function setup(data)
+{ 
+    //return true;
+    //Storing and calculating images.
+    twdImages = new TowerDefenseImages();
+    
+    twdGrid = new TowerDefenseGrid();
+    twdGraphics = new TowerDefenseGraphics();
+    twdCalculate = new TowerDefenseCalculate();
+    //Load content.    
+        
+        {
+          
+            //Processing images.
+            for(var i = 0; i < data['images'].length; i++)
+            {
+                //Push images to available image list.
+                var imageSrc = data['images'][i];
+                var image = new TowerDefenseImage(imageSrc.image_id, imageSrc.image_name, imageSrc.image_b64)
+                twdContent.images.push(image);
+            }
+
+            //Processing projectiles.
+            for(var i = 0; i < data['projectiles'].length; i++)
+            {
+                var projectileSrc = data['projectiles'][i];
+                var projectile = new TowerDefenseProjectile(
+                    projectileSrc['projectile_id'], projectileSrc['projectile_name'],
+                    projectileSrc['projectile_type'],projectileSrc['projectile_minlaunchdelay'],projectileSrc['projectile_maxlaunchdelay'],
+                    projectileSrc['projectile_minfixedangle'],projectileSrc['projectile_maxfixedangle'], projectileSrc['projectile_methodcalculate']);
+
+
+                
+                //Finding image by id.
+                var image = twdContent.images.find(x => x.id === projectileSrc['projectile_images_image_id']);
+                
+                if(image != null)
+                {
+                    //Rotating images if nog already started/done.
+                    if(image.images == null)
+                    {
+                        //Rotating images.
+                        image.images = await image.calculateRotations();
+                    }
+                
+                    //Add image reference to tower.
+                    projectile.image = image;
+                }
+                twdContent.projectiles.push(projectile);
+            }
+
+            //Processing turrets.
+            for(var i = 0; i < data['turrets'].length; i++)
+            {
+                var towerSrc = data['turrets'][i];
+                
+                var tower = new TowerDefenseTower(towerSrc.turret_id, towerSrc.turret_name, towerSrc.turret_type,
+                towerSrc.turret_costs, towerSrc.turret_speed, towerSrc.turret_range, towerSrc.turret_damage, towerSrc.turret_projectilescount,
+                towerSrc.turret_methodcalculate, towerSrc.turret_methodshoot, towerSrc.turret_findenemies, towerSrc.turret_findenemy);
+
+                //Finding image by id.
+                var image = twdContent.images.find(x => x.id === towerSrc.turret_images_image_id);
+                if(image != null)
+                {
+                    //Rotating images if nog already started/done.
+                    if(image.images == null)
+                    {
+                        //Rotating images.
+                        image.images = await image.calculateRotations();
+                    }
+
+                    //Add image reference to tower.
+                    tower.image = image;
+                }
+
+                //Finding projectile
+                var projectile = twdContent.projectiles.find(x => x.id === towerSrc.turret_projectiles_projectile_id);
+                tower.projectile = projectile;
+                
+                //Push tower to tower optionlist.
+                twdContent.towers.push(tower);
+            }
+
+            //Processing Barrels
+            for(var i = 0; i < data['turretbarrels'].length; i++)
+            {
+                var barrelSrc = data['turretbarrels'][i];
+                var barrel = new TowerDefenseBarrel(barrelSrc['turretbarrel_id'], barrelSrc['turretbarrel_location']);
+
+                var tower = twdContent.towers.find(x => x.id === barrelSrc['turretbarrel_turrets_turret_id']);
+
+                if(tower.barrels == null)
+                {
+                    tower.barrels = [];
+                }
+                tower.barrels.push(barrel);
+            }
+            
+            //Processing levels.
+            for(var i = 0; i < data['levels'].length; i++)
+            {
+                var levelSrc = data['levels'][i];
+
+                var level = new TowerDefenseLevel(levelSrc['level_id'],levelSrc['level_name'], levelSrc["level_description"]);
+                if(twdContent.levels == null)
+                {
+                    twdContent.levels = [];
+                }
+                twdContent.levels.push(level);
+            }
+
+            //Processing cells
+            for(var i = 0; i < data['levelcells'].length; i++)
+            {
+                var cellSrc = data['levelcells'][i];
+
+                var cell = new TowerDefenseCell(cellSrc['levelcell_id'],cellSrc['levelcell_x'], cellSrc["levelcell_y"]);
+                
+                
+                var image = twdContent.images.find(x => x.id === cellSrc.levelcell_images_image_id);
+                //console.log(image);
+                //var result = await image.calculateImage(); 
+
+                if(image != null)
+                {
+                    if(image.image == null)
+                    {     
+                        //image.calculateImage(image);
+                        //console.log("Hoi");                   
+                        image.image = await image.calculateImage(); 
+                        //console.log("doei");
+                    }
+                    cell.image = image;                          
+                }                
+
+                var level = twdContent.levels.find(x => x.id === cellSrc.levelcell_levels_level_id);
+
+                if(level.cells == null)
+                {
+                    level.cells = [];
+                }
+                level.cells.push(cell);
+            }
+
+            for(var i = 0; i < data['paths'].length; i++)
+            {
+                var pathSrc = data['paths'][i];
+
+                var level = twdContent.levels.find(x => x.cells.find(q => q.id === pathSrc['levelpath_levelcells_levelcell_id']));
+                var cell = level.cells.find(x => x.id === pathSrc['levelpath_levelcells_levelcell_id']);
+
+                var path = new TowerDefensePath(pathSrc["levelpath_id"], pathSrc["levelpath_index"]);
+                path.cell = cell;
+                if(level.paths == null)
+                {
+                    level.paths = [];
+                }
+
+                level.paths.push(path);
+            }
+
+            for(var i = 0; i < data['enemies'].length; i++)
+            {
+                var enemySrc = data['enemies'][i];
+
+                var enemy = new TowerDefenseEnemy(enemySrc['enemy_id'], enemySrc['enemy_name'],enemySrc['enemy_reward'],
+                                        enemySrc['enemy_speed'],enemySrc['enemy_lives']);
+
+                var image = twdContent.images.find(x => x.id === enemySrc.enemy_images_image_id);
+                if(image != null)
+                {
+                    //Rotating images if nog already started/done.
+                    if(image.images == null)
+                    {
+                        //Rotating images.
+                        image.images = await image.calculateRotations();
+                    }
+
+                    //Add image reference to tower.
+                    enemy.image = image;
+                }
+                twdContent.enemies.push(enemy);
+            }
+
+
+            twdEventHandlers = new EventHandlers();
+            twdEventHandlers.setupMainHandlers();
+
+            twdMenu = new TowerDefenseMenu();
+            twdMenu.addTowers();
+
+            twdGameLoop = new GameLoop();
+            twdGame = new TowerDefenseGame();
+            twdGame.selectLevel(twdContent.levels[0]);
+            twdGameLoop.start();  
+            
+            
+
+            function copyInstanceStack (original) {
+                var copied = Object.assign(
+                  Object.create(
+                    Object.getPrototypeOf(original)
+                  ),
+                  original
+                );      
+                return copied;
+            }
+
+            var enemyCopy = copyInstanceStack(twdContent.enemies[0]);
+            enemyCopy.init();
+
+            twdGame.enemies.push(enemyCopy);
+        }
+    
+
+
+
+    //return true;
+	//twdImages = new TowerDefenseImages();
+	//twdImages.setupTowers();
+	//twdImages.setupEnemies();
+	//twdImages.setupBullets();    
+	//twdImages.setupAssets(); 
+    //twdImages.setupGridImages();
+    //twdImages.setupExplosions();
 
 	
-	twdEventHandlers = new EventHandlers();
-	twdEventHandlers.setupMainHandlers();
 	
-	twdGrid = new TowerDefenseGrid();
-	//twdGrid.setupOpenGrid(0, 0 ,9,9, 10, 10, 50, 50);
-
-
-    twdGrid.setupLevelOne();
-
-    twdMenu = new Menu();
 	
-	twdGameLoop = new GameLoop();
+	// twdGrid = new TowerDefenseGrid();
+	// //twdGrid.setupOpenGrid(0, 0 ,9,9, 10, 10, 50, 50);
 
+
+    // twdGrid.setupLevelOne();
 
     
-    //console.log(test['hoi']);
-
-   //  RegisterTurret(RocketLauncher);
-
-   //  //Turret.prototype = Object.create(Weapon.prototype); // Inherit!
-   //  //Turret.prototype.constructor = Turret;
-
-   //  //RocketLauncher.prototype = Object.create(Weapon.prototype); // Inherit!
-   //  //RocketLauncher.prototype.constructor = RocketLauncher;
-   //  // var turret = new Turret(1, 2 , 3);
-
-   // // console.log(turret);
-   //  //console.log()
-
-   //  //return;
-
-   //  function RegisterTurret(turret)
-   //  {
-   //      console.log(turret.name);
-   //      test[turret.name] = turret;
-       
-        
-       
-   //      //console.log(turret.constructor);
-   //     // test['hoi'] = 'test';
-   //  }
+	// twdGameLoop = new GameLoop();
 
 
- setTimeout(function () {
+    // setTimeout(function () {
 
-        twdGameLoop.start();
-        interval(function(){
-             twdGrid.enemies.push(new EnemyTank(0, 150, 5));
-        }, 1000,100);  
+    //         twdGameLoop.start();
+    //         interval(function(){
+    //             twdGrid.enemies.push(new EnemyTank(0, 150, 5));
+    //         }, 1000,100);  
 
-        interval(function(){
-            
-            document.getElementById("pocket").innerHTML = twdGrid.money;            
-             
-        }, 1500, 999); 
+    //         interval(function(){
+                
+    //             document.getElementById("pocket").innerHTML = twdGrid.money;            
+                
+    //         }, 1500, 999); 
 
 
- }, 2000);
-
-	//twdGameLoop.start();
-
-  //setInterval(function(){ twdGrid.enemies.push(new EnemyTank(0)); }, 3000);
-  
+    // }, 2000);  
 }
 
 function interval(func, wait, times){

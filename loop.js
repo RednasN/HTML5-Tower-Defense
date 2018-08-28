@@ -39,10 +39,12 @@ function GameLoop()
 		    {
 		    	twdGameLoop.accumulator -= twdGameLoop.dt;
 
-		    	twdGrid.calculateTurrets();
-				twdGrid.calculateEnemies();
-				twdGrid.calculateBullets();
-				twdGrid.calculateExplosions();
+				twdCalculate.calculateTurrets();
+		    	//twdGrid.calculateTurrets();
+				twdCalculate.calculateEnemies();
+				twdCalculate.calculateProjectiles();
+				//twdGrid.calculateBullets();
+				//twdGrid.calculateExplosions();
 		    }
 	    }	    
 
@@ -71,14 +73,20 @@ function GameLoop()
 			    mainCtx.clear(mainCtx.COLOR_BUFFER_BIT);
 			}
 
-			twdGrid.draw();
-			//console.log("Draw!");
+			//
+			twdGraphics.drawGrid();
+			twdGraphics.drawTurrets();
+			twdGraphics.drawEnemies();
+			twdGraphics.drawProjectiles();
 
-			twdGrid.drawAssets();
-			twdGrid.drawTurrets();
-			twdGrid.drawEnemies();
-			twdGrid.drawExplosions();
-			twdGrid.drawBullets();
+			//console.log('Draw' );
+			//twdGrid.draw();
+
+			//twdGrid.drawAssets();
+			//twdGrid.drawTurrets();
+			//twdGrid.drawEnemies();
+			//twdGrid.drawExplosions();
+			//twdGrid.drawBullets();
 			
 		}
 

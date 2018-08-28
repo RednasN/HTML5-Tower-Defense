@@ -320,7 +320,7 @@ function TowerDefenseImages()
 	};
 
 	this.setupBullets = function() {
-		calculateRotateImages("BasicBullet", imgBullet_Basic, this.bullets, 32 , 32);
+		calculateRotateImages("BasicBullet", imgBullet_Basic, this.bullets, 50 , 50);
 		calculateRotateImages("Rocket", imgRocket_Basic, this.bullets, 50 , 50);
 		calculateRotateImages("NuclearGrenade", nuclear_bullet, this.bullets, 50 , 50);
 

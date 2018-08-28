@@ -160,9 +160,9 @@ function EventHandlers()
 
 		var clickedCell = null;
 
-		mainCanvas.addEventListener('touchstart', function(e) {
+		 mainCanvas.addEventListener('touchstart', function(e) {
 			
-			mainCanvasYCurrent = e.targetTouches[0].pageY / scaleToFit;
+		 	mainCanvasYCurrent = e.targetTouches[0].pageY / scaleToFit;
             mainCanvasXCurrent = e.targetTouches[0].pageX / scaleToFit;
 
             function singleClick()
@@ -178,18 +178,15 @@ function EventHandlers()
 
             function getClickedCell()
             {
-	            for (x = 0; x < twdGrid.grid.length; x++) {
-		                for (y = 0; y < twdGrid.grid[x].length; y++) {
-		                	var startx = twdGrid.grid[x][y].drawx + mainCanvasXOffset;
-		                	var starty = twdGrid.grid[x][y].drawy + mainCanvasYOffset;
-
-		                	if (mainCanvasXCurrent > startx  && mainCanvasXCurrent < (startx + twdGrid.grid[x][y].width) &&
-		                                mainCanvasYCurrent > starty && mainCanvasYCurrent < (starty + twdGrid.grid[x][y].height)) {
-		                		 
-	                            return twdGrid.grid[x][y];
-		                	}
-		                }
-	            }
+				for (var x = 0; x < twdGame.level.cells.length; x++) {           
+					var startx = (twdGame.level.cells[x].x*twdGraphics.cellWidth) + mainCanvasXOffset;
+					var starty = (twdGame.level.cells[x].y*twdGraphics.cellHeight) + mainCanvasXOffset;
+		 
+					if (mainCanvasXCurrent > startx  && mainCanvasXCurrent < (startx + twdGraphics.cellWidth) &&
+		                                mainCanvasYCurrent > starty && mainCanvasYCurrent < (starty + twdGraphics.cellHeight)) {
+	                    return twdGame.level.cells[x];
+		            }
+				}
 	            return null;
        		}
 
@@ -238,15 +235,15 @@ function EventHandlers()
 
 		mainCanvas.addEventListener('touchmove', function(e) {
 
-			//mainCanvasYCurrent = e.targetTouches[0].pageY / scaleToFit;
-            //mainCanvasXCurrent = e.targetTouches[0].pageX / scaleToFit;
-            if(twdMenu.draggedTurret != null)
-            {
-            	mainCanvasYCurrent = e.targetTouches[0].pageY / scaleToFit;
-            	mainCanvasXCurrent = e.targetTouches[0].pageX / scaleToFit;
-            }
+			// //mainCanvasYCurrent = e.targetTouches[0].pageY / scaleToFit;
+            // //mainCanvasXCurrent = e.targetTouches[0].pageX / scaleToFit;
+            // if(twdMenu.draggedTurret != null)
+            // {
+            // 	mainCanvasYCurrent = e.targetTouches[0].pageY / scaleToFit;
+            // 	mainCanvasXCurrent = e.targetTouches[0].pageX / scaleToFit;
+            // }
 
-            if(twdMenu.draggedTurret == null)
+            //if(twdMenu.draggedTurret == null)
             {
 				var diffY = e.targetTouches[0].pageY / scaleToFit - mainCanvasYCurrent;
 	            mainCanvasYCurrent += diffY;
@@ -266,12 +263,9 @@ function EventHandlers()
 		});
 
 		mainCanvas.addEventListener('touchend', function(e) {
-			//mainCanvasYCurrent = e.screenY;
-            //mainCanvasXCurrent = e.screenX;
 
 
-            twdMenu.drop();
-			//twdMenu.draggedTurret = null;
+            //twdMenu.drop();
             
 
 			e.preventDefault();

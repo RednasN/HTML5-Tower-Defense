@@ -30,7 +30,7 @@ class MultiRocketLauncher extends Weapon {
 
         for(var i = 0;i < 50; i++)
         {
-            var angleTIme = this.randomIntFromInterval(this.minFixedAngleTime, this.maxFixedAngleTime);
+            var angleTime = this.randomIntFromInterval(this.minFixedAngleTime, this.maxFixedAngleTime);
             var shootingDelay = this.randomIntFromInterval(this.minShootingDelay, this.maxShootingDelay);
 
             var randomFocusedIndex = Math.floor(Math.random()*this.focusedIndexes.length);
@@ -57,7 +57,7 @@ class MultiRocketLauncher extends Weapon {
             //console.log(angleLoop);
 
             
-            twdGrid.bullets.push(new MultiRocket(this.gridX, this.gridY, this.focusedIndexes[randomFocusedIndex], 1, totalAngle, this.damage, angleTIme, shootingDelay));
+            twdGrid.bullets.push(new MultiRocket(this.gridX, this.gridY, this.focusedIndexes[randomFocusedIndex], 1, totalAngle, this.damage, angleTime, shootingDelay));
         }
 
         this.focusedIndexes = [];    

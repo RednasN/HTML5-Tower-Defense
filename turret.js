@@ -9,8 +9,7 @@ class Turret extends Weapon {
 
       this.range = 200;
       this.damage = 10;
-      this.speed = 2000; 
-
+      this.speed = 2000;
       this.locked = false;
     }
 

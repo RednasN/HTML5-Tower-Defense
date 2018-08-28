@@ -57,7 +57,6 @@ class Weapon {
       this.startx = twdGrid.grid[this.gridX][this.gridY].drawx + mainCanvasXOffset;
       this.starty = twdGrid.grid[this.gridX][this.gridY].drawy + mainCanvasYOffset;
       
-
       this.findClosest();
 
       if(this.focusedIndex != -1 && !this.isInRange(this.focusedIndex))
@@ -194,7 +193,6 @@ class Weapon {
            //initiate.
            return true;
         }
-
         return false;
     }
 };
