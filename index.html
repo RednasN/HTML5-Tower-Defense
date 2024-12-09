@@ -12,49 +12,7 @@
         <script type="text/javascript" src="./webgl/m4.js"></script>
         <script type="text/javascript" src="./webgl/webgl-utils.js"></script>
 
-
-        <script id="drawImage-vertex-shader" type="x-shader/x-vertex">
-            attribute vec4 a_position;
-            attribute vec2 a_texcoord;
-
-            uniform mat4 u_matrix;
-
-            varying vec2 v_texcoord;
-
-            void main() {
-               gl_Position = u_matrix * a_position;
-               v_texcoord = a_texcoord;
-            }
-            </script>
-            <script id="drawImage-fragment-shader" type="x-shader/x-fragment">
-            precision mediump float;
-
-            varying vec2 v_texcoord;
-
-            uniform sampler2D u_texture;
-
-            void main() {
-               gl_FragColor = texture2D(u_texture, v_texcoord);
-            }
-        </script>
-
-        <script type="text/javascript" src="weapon.js"></script>
-        <script type="text/javascript" src="turret.js"></script>
-        <script type="text/javascript" src="enemytank.js"></script>		
-        <script type="text/javascript" src="images.js"></script>
-		<script type="text/javascript" src="eventhandlers.js"></script>		
-		<script type="text/javascript" src="grid.js"></script>
-		<script type="text/javascript" src="loop.js"></script>
-        <script type="text/javascript" src="menu.js"></script>
-        <script type="text/javascript" src="turretbullet.js"></script>
-        <script type="text/javascript" src="rocketlauncher.js"></script>
-        <script type="text/javascript" src="rocket.js"></script>
-        <script type="text/javascript" src="main.js"></script>        
-        <script type="text/javascript" src="explosion.js"></script>
-        <script type="text/javascript" src="nuclearbullet.js"></script>
-        <script type="text/javascript" src="nuclearlauncher.js"></script>
-        <script type="text/javascript" src="multirocket.js"></script>
-        <script type="text/javascript" src="multirocketlauncher.js"></script>
+        <script type="module" src="/src/main.ts"></script>
 
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
@@ -276,7 +234,7 @@
         </style>
 
     </head>
-    <body onresize="resizeCanvas()" style="margin:0px">
+    <body onresize="calculateSize()" style="margin:0px">
 		<canvas id="canvasImageProvider" style="display:none;" width="50" height="50"></canvas>
 		<canvas id="towerDefenseView" ></canvas>
 
@@ -287,16 +245,16 @@
          </div>
 		 
 		 <div class="menu" style="background: rgba(0, 0, 0, 0.5);">
-			<img src="./images/menu.svg" style="" />
-            <img src="./images/build.svg" style="" onclick="twdEventHandlers.showBuild()" />
-			<img src="./images/play.svg" id="gamestate" onclick="twdEventHandlers.changePause()" style="" />			
-			<img src="./images/speed-level-1.svg" id="gamespeed" onclick="twdEventHandlers.changeSpeed()"  style="" />
+			<img src="./images/menu.svg" />
+            <img src="./images/build.svg" class="showBuild" />
+			<img src="./images/play.svg" class="changePause" id="gamestate" />			
+			<img src="./images/speed-level-1.svg" class="changeSpeed" id="gamespeed" />
 		 </div>
 		 
         <div id="modal-level" class="modal" style="display:none;">
             <div class="modal-header">   
                <div class="upgrade-left">Pick a map!</div>
-                <button class="close-button" onclick="twdEventHandlers.closeBuildModal(this)"></button>        
+                <button class="close-button closeBuildModal"></button>        
             </div>
             <div class="modal-content">
                 <div class="full-box" id = "levels">
@@ -304,7 +262,7 @@
                 </div>
             </div>
             <div class="modal-footer">                                      
-                <button class="accept-button" onclick="twdEventHandlers.buildTurret(this)"></button>        
+                <button class="accept-button buildTurret"></button>        
             </div>   
         </div>
 
@@ -312,7 +270,7 @@
           <!-- Modal content -->
             <div class="modal-header">   
                <div class="upgrade-left">Build a turret!</div>
-                <button class="close-button" onclick="twdEventHandlers.closeBuildModal(this)"></button>        
+                <button class="close-button closeBuildModal"></button>        
             </div>
             <div class="modal-content"> 
                 <div class="box" id = "turrets">
@@ -324,7 +282,7 @@
                             <img src ="images/speed.png"  width="30" height="30" />
                         </div>
                         <div id ="speedvalue" class="upgrade-left">0</div>
-                        <div id ="speedplusmin" class="upgrade-left" onclick="twdEventHandlers.plusSpeed()" style="margin-right:0px;float:right;">
+                        <div id ="speedplusmin" class="upgrade-left plusSpeed" style="margin-right:0px;float:right;">
                             <div id = "upgrade" class="upgradeBtn" disabled>
                                 <div style="margin-left:5px;float:left;">Upgrade</div> 
 
@@ -342,7 +300,7 @@
                             <img src ="images/power.png" width="30" height="30" />
                         </div>
                         <div id ="powervalue" class="upgrade-left">0</div>
-                        <div id ="speedplusmin" class="upgrade-left" onclick="twdEventHandlers.plusPower()" style="margin-right:0px;float:right;">
+                        <div id ="speedplusmin" class="upgrade-left plusPower" style="margin-right:0px;float:right;">
                             <div id = "upgrade" class="upgradeBtn" disabled>
                                 <div style="margin-left:5px;float:left;">Upgrade</div> 
 
@@ -361,7 +319,7 @@
                             <img src ="images/range.png" width="30" height="30" />
                         </div>
                         <div id ="rangevalue" class="upgrade-left">0</div>
-                        <div id ="speedplusmin" class="upgrade-left" onclick="twdEventHandlers.plusRange()" style="margin-right:0px;float:right;">
+                        <div id ="speedplusmin" class="upgrade-left plusRange" style="margin-right:0px;float:right;">
                             <div id = "upgrade" class="upgradeBtn" disabled>
                                 <div style="margin-left:5px;float:left;">Upgrade</div> 
 
@@ -380,8 +338,8 @@
                         </div>
                         <div id ="speedvalue" class="upgrade-left">0</div>
                         <div id ="speedplusmin" class="upgrade-left" style="margin-right:0px;">
-                            <img src ="images/minus.png" onclick="twdEventHandlers.minusSpeed()" width="30" height="30" />
-                            <img src ="images/plus.png" onclick="twdEventHandlers.plusSpeed()" width="30" height="30" />
+                            <img src ="images/minus.png" class="minSpeed" width="30" height="30" />
+                            <img src ="images/plus.png" class="plusSpeed" width="30" height="30" />
                         </div>
                         <div id ="rangeimage" class="upgrade-right">
                             <img src ="images/money.png" width="30" height="30" />
@@ -394,8 +352,8 @@
                         </div>
                         <div id ="powervalue" class="upgrade-left">0</div>
                         <div id ="powerplusmin" class="upgrade-left" style="margin-right:0px;">
-                            <img src ="images/minus.png" onclick="twdEventHandlers.minusPower()"   width="30" height="30" />
-                            <img src ="images/plus.png" onclick="twdEventHandlers.plusPower()" width="30" height="30" />
+                            <img src ="images/minus.png" class="minPower"  width="30" height="30" />
+                            <img src ="images/plus.png" class="plusPower" width="30" height="30" />
                         </div>
                         <div id ="rangeimage" class="upgrade-right">
                             <img src ="images/money.png" width="30" height="30" />
@@ -409,8 +367,8 @@
                         </div>
                         <div id ="rangevalue" class="upgrade-left">0</div>
                         <div id ="rangeplusmin" class="upgrade-left" style="margin-right:0px;">
-                            <img src ="images/minus.png" onclick="twdEventHandlers.minusRange()" width="30" height="30" />
-                            <img src ="images/plus.png" onclick="twdEventHandlers.plusRange()" width="30" height="30" />
+                            <img src ="images/minus.png" class="minRange"  width="30" height="30" />
+                            <img src ="images/plus.png" class="plusRange" width="30" height="30" />
                         </div>
                         <div id ="rangeimage" class="upgrade-right">
                             <img src ="images/money.png" width="30" height="30" />
@@ -421,7 +379,7 @@
             </div>     
             <div class="modal-footer">   
                 <div class="upgrade-left">Total:</div> <div class="upgrade-left" id="totalcost">0</div>                      
-                <button class="accept-button" onclick="twdEventHandlers.buildTurret(this)"></button>        
+                <button class="accept-button buildTurret"></button>        
             </div>    
     </body>
 

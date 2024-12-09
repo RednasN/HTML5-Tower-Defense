@@ -55,15 +55,8 @@ function TowerDefenseGrid()
 			for (y = 0; y < 15; y++) {
 
 				this.turrets[x][y] = null;
-				if(twdGrid.grid[x][y].imageIndex == 3)
-				{
-					//var turret = new Turret(x, y, 0);
-	                //		twdGrid.turrets[x][y] = turret;
-	              }
-				//this.turrets[x][y] = null;
 			}
 		}
-
 	};
 
 	this.drawAssets = function ()
@@ -243,14 +236,8 @@ function TowerDefenseGrid()
 			neighbourList.push(this.grid[position.x][position.y - 1]);
 		}
 
-		//neighbourList = neighbourList.reverse();
-
 		neighbourList.forEach(function(value, i) {
 			neighbourList[i].parentcell = position;
-
-			//console.log(neighbourList[i].done);
-			//console.log(endPosition);
-			//neighbourList[i].steps = neighbourList[i].x + neighbourList[i].y;
 
 			if (neighbourList[i].y > endPosition.y) {
 				neighbourList[i].steps += neighbourList[i].y - endPosition.y;

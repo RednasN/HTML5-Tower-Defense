@@ -29,9 +29,6 @@ function Menu()
 
 	this.checkMenuClick = function ()
 	{
-		//mainCanvasYCurrent = e.screenY;
-        //mainCanvasXCurrent = e.screenX;
-
 		if(mainCanvasXCurrent > mainCanvas.width-twdImages.imgBlackTransparent.width)
         {
         	for (x = 0; x < this.sideMenu.length; x++) {

@@ -142,35 +142,6 @@ function setup()
 	twdGameLoop = new GameLoop();
 
 
-    
-    //console.log(test['hoi']);
-
-   //  RegisterTurret(RocketLauncher);
-
-   //  //Turret.prototype = Object.create(Weapon.prototype); // Inherit!
-   //  //Turret.prototype.constructor = Turret;
-
-   //  //RocketLauncher.prototype = Object.create(Weapon.prototype); // Inherit!
-   //  //RocketLauncher.prototype.constructor = RocketLauncher;
-   //  // var turret = new Turret(1, 2 , 3);
-
-   // // console.log(turret);
-   //  //console.log()
-
-   //  //return;
-
-   //  function RegisterTurret(turret)
-   //  {
-   //      console.log(turret.name);
-   //      test[turret.name] = turret;
-       
-        
-       
-   //      //console.log(turret.constructor);
-   //     // test['hoi'] = 'test';
-   //  }
-
-
  setTimeout(function () {
 
         twdGameLoop.start();
@@ -185,12 +156,7 @@ function setup()
         }, 1500, 999); 
 
 
- }, 2000);
-
-	//twdGameLoop.start();
-
-  //setInterval(function(){ twdGrid.enemies.push(new EnemyTank(0)); }, 3000);
-  
+ }, 2000);  
 }
 
 function interval(func, wait, times){

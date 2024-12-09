@@ -12,12 +12,12 @@ function Explosion(x, y, explosionIndex) {
 
 
 	this.calculate = function() {
-		
+
 		if(this.explosion_index < this.explosion_length)
 		{
 			this.current_tick--;
 
-			if(this.current_tick == 0)
+			if(this.current_tick === 0)
 			{
 				this.explosion_index++;
 				this.current_tick = this.tics_per_frame;
@@ -35,7 +35,7 @@ function Explosion(x, y, explosionIndex) {
     		twdGrid.render(twdImages.explosions[this.explosion_list_index].images[this.explosion_index], Math.round(this.drawx) + mainCanvasXOffset, Math.round(this.drawy) + mainCanvasYOffset);
     		//mainCtx.drawImage(twdImages.explosions[this.explosion_list_index].images[this.explosion_index], Math.round(this.drawx) + mainCanvasXOffset, Math.round(this.drawy) + mainCanvasYOffset)
     	}
-       	
+
 
     }
 

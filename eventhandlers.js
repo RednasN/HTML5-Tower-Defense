@@ -18,9 +18,6 @@ function EventHandlers()
 		
 		
 		calculateUpgradeCosts();
-
-		
-
 	};
 
 	function calculateUpgradeCosts()
@@ -29,15 +26,10 @@ function EventHandlers()
 		document.getElementById("rangeCost").innerHTML = Math.round((parseInt(document.getElementById("rangevalue").innerHTML) + 1) * (twdMenu.towercost / 5));
 		document.getElementById("powerCost").innerHTML = Math.round((parseInt(document.getElementById("powervalue").innerHTML) + 1) * (twdMenu.towercost / 5));
 
-		//this.towerSpeedCost = 0;
-	    //this.towerPowerCost = 0;
-	    //this.towerRangeCost = 0;
-
 		if(parseInt(document.getElementById("speedvalue").innerHTML) != twdMenu.speedLevel)
 		{
 			twdMenu.speedLevel = parseInt(document.getElementById("speedvalue").innerHTML);
-			twdMenu.towerSpeedCost += (twdMenu.towercost / 5) * twdMenu.speedLevel;
-			
+			twdMenu.towerSpeedCost += (twdMenu.towercost / 5) * twdMenu.speedLevel;			
 		}
 
 		if(parseInt(document.getElementById("powervalue").innerHTML) != twdMenu.powerLevel)

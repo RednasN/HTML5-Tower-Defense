@@ -27,14 +27,6 @@ var multilauncher = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAA
 
 var imgSurrounderSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAA2klEQVRoQ+2aywrCMBBFbygogj/kzk935w8JolAiXQRKfUAwY2/kdJNdyeSeOVlMUpbyfZQ2g9Tzmm6jcu9FTPtPJGKG41Mix6t02knu67IdXvaIexFlf/NiSMQBv6pEtoOSDL7DRXl+eNU9ct57FDLdd8veJZE1CSOR0lj0SGMOsVZRHfdIY7SwFtZqjFT5HdbCWkFoYS2sFYQW1sJaQWhhLawVhBbWwlpBaGEtrBWEFtbCWkFofW0t18Fo9cTKYVb47jCrJlYk8oNHBx8T6fWBDa+D3JL7m0Qe7HvOOT05TSIAAAAASUVORK5CYII=";
 
-//var images = [];
-//images[] = 
-
-
-
-
-
-
 function TowerDefenseImages()
 {
 	this.enemies = [];
@@ -105,11 +97,6 @@ function TowerDefenseImages()
 	        saveImage.src = imageCanvas.toDataURL();
         };
         image.src = imagesrc;
-	}
-
-	function calculate()
-	{
-
 	}
 
 	function setImageValue(gridImage)
@@ -383,11 +370,8 @@ function TowerDefenseImages()
 
 		for(var i = 0; i < this.gridImages.length; i++)
 		{	
-			//console.log("Hoera");
 			setImageValue(this.gridImages[i]);
 		}
-
-
 	};
 }
 
