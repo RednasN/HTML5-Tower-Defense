@@ -1,4 +1,5 @@
 import { TwdCanvasState } from './game/canvas-state';
+import { EnemyTank } from './game/enemies/enemytank';
 import { EventHandlers } from './game/event-handlers';
 import { GameLoop } from './game/game-loop';
 import { TowerDefenseGrid } from './game/grid';
@@ -7,6 +8,10 @@ import { TwdMenu } from './game/menu';
 import './style.css'
 
 const canvasState = new TwdCanvasState();
+
+window.onresize = function () {
+  calculateSize();
+};
 
 window.onload = async function () {
   canvasState.mainCanvas = document.getElementById('towerDefenseView') as HTMLCanvasElement;
@@ -39,6 +44,19 @@ window.onload = async function () {
   setTimeout(function () {
       console.log(twdGameLoop);
       twdGameLoop.start();
+
+      interval(function(){
+
+                  const tank = new EnemyTank(twdImages, canvasState, twdGrid, twdGameLoop, 0, 150, 0);
+                  tank.init();
+                  twdGrid.enemies.push(tank);
+              }, 1000,5);  
+        
+              interval(function(){
+                  
+                  document.getElementById("pocket")!.innerHTML = twdGrid.money.toString();            
+                   
+              }, 1500, 999); 
   }, 0);  
 }
 
@@ -59,52 +77,20 @@ function calculateSize() {
   canvasState.mainCanvas.style.transform = 'scale(' + (canvasState.scaleToFit )+ ')';
 }
 
-// twdEventHandlers = new EventHandlers();
-// twdEventHandlers.setupMainHandlers();
+function interval(func: () => void, wait: number, times?: number): void {
+  const interv = (function (w: number, t?: number): () => void {
+    return function (): void {
+      if (typeof t === "undefined" || t-- > 0) {
+        setTimeout(interv, w);
+        try {
+          func.call(null);
+        } catch (e) {
+          t = 0;
+          throw new Error(e instanceof Error ? e.message : "");
+        }
+      }
+    };
+  })(wait, times);
 
-// twdGrid = new TowerDefenseGrid();
-// //twdGrid.setupOpenGrid(0, 0 ,9,9, 10, 10, 50, 50);
-
-
-//   twdGrid.setupLevelOne();
-
-//   twdMenu = new Menu();
-
-// twdGameLoop = new GameLoop();
-
-
-// setTimeout(function () {
-
-//       twdGameLoop.start();
-//       interval(function(){
-//            twdGrid.enemies.push(new EnemyTank(0, 150, 5));
-//       }, 1000,100);  
-
-//       interval(function(){
-          
-//           document.getElementById("pocket").innerHTML = twdGrid.money;            
-           
-//       }, 1500, 999); 
-
-
-// }, 2000);  
-// }
-
-// function interval(func, wait, times){
-//   var interv = function(w, t){
-//       return function(){
-//           if(typeof t === "undefined" || t-- > 0){
-//               setTimeout(interv, w);
-//               try{
-//                   func.call(null);
-//               }
-//               catch(e){
-//                   t = 0;
-//                   throw e.toString();
-//               }
-//           }
-//       };
-//   }(wait, times);
-
-//   setTimeout(interv, wait);
-// };
+  setTimeout(interv, wait);
+}

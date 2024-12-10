@@ -10,6 +10,7 @@ export abstract class Weapon {
     protected gridY: number;
 
     protected focusedIndex: number;
+    protected focusedIndexes: number[];
 
     protected locked: boolean = false;
 
@@ -18,7 +19,7 @@ export abstract class Weapon {
     protected range: number;
     protected speed: number;
     protected damage: number;
-    private focusedIndexes: number[];
+    
     protected startx: number | null;
     protected starty: number | null;
     private lastFired: number;
@@ -204,7 +205,6 @@ export abstract class Weapon {
 
     public isInRange(i: number): boolean
     {     
-        //console.log(this.rangeLevel);
         if(this.twdGrid.enemies[i].lives <= 0)
         {
             return false;

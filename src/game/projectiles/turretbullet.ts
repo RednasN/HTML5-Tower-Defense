@@ -79,7 +79,7 @@ export class TurretBullet {
         {
           this.angle = 359;
         }
-        //var angleDest = 360 - Math.round(rad * (180 / Math.PI));
+        
         this.x = this.x - (200 * this.gameLoop.delta) * Math.cos(rad);
         this.y = this.y - (200 * this.gameLoop.delta) * Math.sin(rad);
 

@@ -6,11 +6,13 @@ export class TowerDefenseGrid {
 	public selectedCell: Cell | null = null;
     public grid: Cell[][] = [];
 	public turrets: any[] = [];
+	public explosions: any[] = [];
 
 	public enemies: any[] = [];
     public bullets: any[] = [];
 
-    private route: Cell[] = [];
+    public route: Cell[] = [];
+	
 
     private grid_height: number | null = null;
     private grid_width: number | null = null;
@@ -18,9 +20,9 @@ export class TowerDefenseGrid {
     private mainCtx: CanvasRenderingContext2D;
 
     
-    private explosions: any[] = [];
+    
 
-    private money: number = 100;
+    public money: number = 100;
 
     private mode: string = "Canvas"; //Canvas
 

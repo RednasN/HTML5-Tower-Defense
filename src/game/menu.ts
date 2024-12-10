@@ -5,6 +5,9 @@ import { TwdCanvasState } from "./canvas-state";
 import { TowerDefenseGrid } from "./grid";
 import { TowerDefenseImages } from "./images";
 import { Turret } from "./weapons/turret";
+import { RocketLauncher } from './weapons/rockerlauncher';
+import { NuclearLauncher } from './weapons/nuclearlauncher';
+import { MultiRocketLauncher } from './weapons/multirocketlauncher';
 
 export class TwdMenu {
     public speedLevel = 1;
@@ -60,9 +63,8 @@ export class TwdMenu {
 
                         if(this.draggedTurret.turretIndex == 1)
                         {
-                             // TODO FIX THIS WHEN IMPLEMENTING NEW TURRETS
-                             //var turret = new RocketLauncher(x, y, 1);
-                             //this.twdGrid.turrets[x][y] = turret;
+                             let turret = new RocketLauncher(this.twdImages, this.canvasState, this.twdGrid, this.twdGameLoop, x, y, 1);
+                             this.twdGrid.turrets[x][y] = turret;
                         }
                     }
                 }
@@ -119,20 +121,17 @@ export class TwdMenu {
 
         if(this.buildIndex == 1)
         {
-            // TODO FIX THIS WHEN IMPLEMENTING NEW TURRETS
-            //turret = new RocketLauncher(this.buildx, this.buildy, 1);
+            turret = new RocketLauncher(this.twdImages, this.canvasState, this.twdGrid, this.twdGameLoop, this.buildx, this.buildy, 1);
         }
 
         if(this.buildIndex == 2)
         {
-            // TODO FIX THIS WHEN IMPLEMENTING NEW TURRETS
-            //turret = new NuclearLauncher(this.buildx, this.buildy, 2);
+            turret = new NuclearLauncher(this.twdImages, this.canvasState, this.twdGrid, this.twdGameLoop, this.buildx, this.buildy, 2);
         }
 
         if(this.buildIndex == 3)
         {
-            // TODO FIX THIS WHEN IMPLEMENTING NEW TURRETS
-            //turret = new MultiRocketLauncher(this.buildx, this.buildy, 3);
+            turret = new MultiRocketLauncher(this.twdImages, this.canvasState, this.twdGrid, this.twdGameLoop, this.buildx, this.buildy, 3);
         }
 
         if(turret != null)

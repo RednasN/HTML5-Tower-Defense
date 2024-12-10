@@ -18,8 +18,8 @@ export class TowerDefenseImages {
     public towers: RotateImage[]= [];
     public bullets: RotateImage[]= [];
 
-    private enemies: RotateImage[]= [];
-    private explosions: RotateImage[]= [];
+    public enemies: RotateImage[]= [];
+    public explosions: RotateImage[]= [];
 
     public gridImages : HTMLImageElement[] = [];
     public imgSurrounder: HTMLImageElement | null = null;
