@@ -5,7 +5,7 @@ import { TowerDefenseImages } from "../images";
 import { MultiRocket } from "../projectiles/multirocket";
 import { Weapon } from "./weapon";
 
-export class MultiRocketLauncher extends Weapon {    
+export class MultiRocketLauncher extends Weapon {
 
     private canons: number[] = [];
 
@@ -24,11 +24,11 @@ export class MultiRocketLauncher extends Weapon {
         this.twdImages = twdImages;
         this.twdGrid = twdGrid;
       this.angle = Math.floor(Math.random() * (359 - 0 + 1) + 0);
-    
+
       //Default values for rocketlauncher
       this.range = 1000;
       this.damage = 1;
-      this.speed = 1000;    
+      this.speed = 1000;
       this.maxFixedAngleTime = 1000;
       this.minFixedAngleTime = 0;
 
@@ -45,15 +45,15 @@ export class MultiRocketLauncher extends Weapon {
     public shoot(): void {
         this.findClosests();
 
-        for(var i = 0;i < 50; i++)
+        for(let i = 0;i < 50; i++)
         {
-            var angleTIme = this.randomIntFromInterval(this.minFixedAngleTime, this.maxFixedAngleTime);
-            var shootingDelay = this.randomIntFromInterval(this.minShootingDelay, this.maxShootingDelay);
+            const angleTIme = this.randomIntFromInterval(this.minFixedAngleTime, this.maxFixedAngleTime);
+            const shootingDelay = this.randomIntFromInterval(this.minShootingDelay, this.maxShootingDelay);
 
-            var randomFocusedIndex = Math.floor(Math.random()*this.focusedIndexes.length);
-            var angleLoop = this.canons[Math.floor(Math.random()*this.canons.length)];            
-            
-            var totalAngle = angleLoop + this.angle;
+            const randomFocusedIndex = Math.floor(Math.random()*this.focusedIndexes.length);
+            let angleLoop = this.canons[Math.floor(Math.random()*this.canons.length)];
+
+            let totalAngle = angleLoop + this.angle;
 
             if(totalAngle > 359)
             {
@@ -67,11 +67,11 @@ export class MultiRocketLauncher extends Weapon {
                 totalAngle = angleLoop;
             }
 
-            
+
             this.twdGrid.bullets.push(new MultiRocket(this.twdGameLoop, this.canvasState, this.twdImages, this.twdGrid, this.gridX, this.gridY, this.focusedIndexes[randomFocusedIndex], 1, totalAngle, this.damage, angleTIme, shootingDelay));
         }
 
-        this.focusedIndexes = [];    
+        this.focusedIndexes = [];
     }
 
     private randomIntFromInterval(min: number,max: number) : number

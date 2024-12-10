@@ -17,9 +17,7 @@ export class TowerDefenseGrid {
     private grid_height: number | null = null;
     private grid_width: number | null = null;
 
-    private mainCtx: CanvasRenderingContext2D;
-
-    
+    private mainCtx: CanvasRenderingContext2D;   
     
 
     public money: number = 100;
