@@ -40,9 +40,9 @@ export class EventHandlers {
   private getClickedCell(): Cell | null {
     for (let x = 0; x < this.twdGrid.grid.length; x++) {
       for (let y = 0; y < this.twdGrid.grid[x].length; y++) {
-        var startx =
+        const startx =
           this.twdGrid.grid[x][y].drawx + this.canvasState.mainCanvasXOffset;
-        var starty =
+        const starty =
           this.twdGrid.grid[x][y].drawy + this.canvasState.mainCanvasYOffset;
 
         if (
@@ -226,7 +226,7 @@ export class EventHandlers {
   }
 
   public showBuild(): void {
-    var nowClickedCell = this.twdGrid.selectedCell;
+    const nowClickedCell = this.twdGrid.selectedCell;
 
     if (nowClickedCell != null) {
       this.twdMenu.buildx = nowClickedCell.x;
@@ -370,8 +370,8 @@ export class EventHandlers {
         e.targetTouches[0].pageX / this.canvasState.scaleToFit;
 
       if (this.lastClicked != null) {
-        var nowClicked = new Date();
-        var diff = nowClicked.getTime() - this.lastClicked.getTime();
+        const nowClicked = new Date();
+        const diff = nowClicked.getTime() - this.lastClicked.getTime();
 
         if (diff < 300) {
           const nowClickedCell = this.getClickedCell();
@@ -430,13 +430,13 @@ export class EventHandlers {
       }
 
       if (this.twdMenu.draggedTurret == null) {
-        var diffY =
+        const diffY =
           e.targetTouches[0].pageY / this.canvasState.scaleToFit -
           this.canvasState.mainCanvasYCurrent;
         this.canvasState.mainCanvasYCurrent += diffY;
         this.canvasState.mainCanvasYOffset += diffY;
 
-        var diffX =
+        const diffX =
           e.targetTouches[0].pageX / this.canvasState.scaleToFit -
           this.canvasState.mainCanvasXCurrent;
         this.canvasState.mainCanvasXCurrent += diffX;

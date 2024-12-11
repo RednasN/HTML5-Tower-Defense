@@ -42,7 +42,7 @@ export class GameLoop {
 		if(!this.paused)
 		{
 			//console.log(twdGameLoop.this.speed);
-			var now = new Date().getTime();
+			const now = new Date().getTime();
 			this.deltaCalc = (now - this.then) / 1000 ;
 
 

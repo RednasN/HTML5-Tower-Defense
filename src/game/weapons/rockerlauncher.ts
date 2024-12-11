@@ -29,7 +29,7 @@ export class RocketLauncher extends Weapon {
     }
 
     shoot() {
-        var angle = this.canons[Math.floor(Math.random()*this.canons.length)];        
+        const angle = this.canons[Math.floor(Math.random()*this.canons.length)];        
         this.twdGrid.bullets.push(new Rocket(this.twdGameLoop, this.canvasState, this.twdImages, this.twdGrid, this.gridX, this.gridY, this.focusedIndex, 1, angle, this.damage));
     }
 
@@ -44,7 +44,7 @@ export class RocketLauncher extends Weapon {
         this.angle = 0;
       }
 
-      for(var i = 0; i < this.canons.length; i++)
+      for(let i = 0; i < this.canons.length; i++)
       {
           this.canons[i]++;
           if(this.canons[i] == 359)

@@ -62,14 +62,14 @@ window.onload = async function () {
 
 
 function calculateSize() {
-  var theWidth= window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  var theHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  const theWidth= window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  const theHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   
   canvasState.mainCanvas.width = theWidth / canvasState.drawScale;
   canvasState.mainCanvas.height = theHeight  / canvasState.drawScale;
   
-  var scaleX = theWidth / canvasState.mainCanvas.width;
-  var scaleY = theHeight / canvasState.mainCanvas.height;
+  const scaleX = theWidth / canvasState.mainCanvas.width;
+  const scaleY = theHeight / canvasState.mainCanvas.height;
 
   canvasState.scaleToFit = Math.max(scaleX, scaleY);
 

@@ -1,15 +1,17 @@
-import { TwdCanvasState } from "../canvas-state";
-import { GameLoop } from "../game-loop";
-import { TowerDefenseGrid } from "../grid";
-import { TowerDefenseImages } from "../images";
-import { Explosion } from "../side-effects/explosion";
+import { TwdCanvasState } from '../canvas-state';
+import { GameLoop } from '../game-loop';
+import { TowerDefenseGrid } from '../grid';
+import { TowerDefenseImages } from '../images';
+import { Explosion } from '../side-effects/explosion';
 
 export class EnemyTank {
+  public drawx: number;
+  public drawy: number;
+
+  public routeindex: number;
+  public lives: number;
+
   private reward: number;
-  private lives: number;
-  private drawx: number;
-  private drawy: number;
-  private routeindex: number;
   private imageIndex: number;
   private curveStartx: number | null;
   private curveStarty: number | null;
@@ -37,7 +39,7 @@ export class EnemyTank {
     twdGameLoop: GameLoop,
     reward: number,
     lives: number,
-    imageIndex: number,
+    imageIndex: number
   ) {
     this.twdGameLoop = twdGameLoop;
     this.twdGrid = twdGrid;
@@ -96,16 +98,7 @@ export class EnemyTank {
   public draw(): void {
     if (this.lives <= 0) {
       if (!this.died) {
-        this.twdGrid.explosions.push(
-          new Explosion(
-            this.canvasState,
-            this.twdImages,
-            this.twdGrid,
-            this.drawx,
-            this.drawy,
-            0,
-          ),
-        );
+        this.twdGrid.explosions.push(new Explosion(this.canvasState, this.twdImages, this.twdGrid, this.drawx, this.drawy, 0));
         this.died = true;
       }
 
@@ -115,7 +108,7 @@ export class EnemyTank {
     this.twdGrid.render(
       this.twdImages.enemies[this.imageIndex].images[this.angle],
       Math.round(this.drawx) + this.canvasState.mainCanvasXOffset,
-      Math.round(this.drawy) + this.canvasState.mainCanvasYOffset,
+      Math.round(this.drawy) + this.canvasState.mainCanvasYOffset
     );
   }
 
@@ -137,10 +130,8 @@ export class EnemyTank {
 
       if (this.routeindex - 1 >= 0) {
         if (
-          this.twdGrid.route[this.routeindex - 1].y !=
-            this.twdGrid.route[this.routeindex + 1].y &&
-          this.twdGrid.route[this.routeindex - 1].x !=
-            this.twdGrid.route[this.routeindex + 1].x
+          this.twdGrid.route[this.routeindex - 1].y != this.twdGrid.route[this.routeindex + 1].y &&
+          this.twdGrid.route[this.routeindex - 1].x != this.twdGrid.route[this.routeindex + 1].x
         ) {
           this.docurve = true;
           this.isRight = true;
@@ -162,39 +153,19 @@ export class EnemyTank {
           const bezierx = this.twdGrid.route[this.routeindex].x;
           const beziery = this.twdGrid.route[this.routeindex].y;
 
-          if (
-            startx > endx &&
-            starty > endy &&
-            starty > beziery &&
-            startx == bezierx
-          ) {
+          if (startx > endx && starty > endy && starty > beziery && startx == bezierx) {
             this.isRight = false;
           }
 
-          if (
-            startx < endx &&
-            starty < endy &&
-            starty < beziery &&
-            startx == bezierx
-          ) {
+          if (startx < endx && starty < endy && starty < beziery && startx == bezierx) {
             this.isRight = false;
           }
 
-          if (
-            startx < endx &&
-            starty > endy &&
-            starty > beziery &&
-            startx == bezierx
-          ) {
+          if (startx < endx && starty > endy && starty > beziery && startx == bezierx) {
             this.isRight = false;
           }
 
-          if (
-            startx > endx &&
-            starty < endy &&
-            starty < beziery &&
-            startx == bezierx
-          ) {
+          if (startx > endx && starty < endy && starty < beziery && startx == bezierx) {
             this.isRight = false;
           }
         }
@@ -203,14 +174,10 @@ export class EnemyTank {
 
     if (this.docurve) {
       this.drawx = Math.round(
-        (1 - this.t) * (1 - this.t) * this.curveStartx! +
-          2 * (1 - this.t) * this.t * this.bezierx! +
-          this.t * this.t * this.curveEndx!,
+        (1 - this.t) * (1 - this.t) * this.curveStartx! + 2 * (1 - this.t) * this.t * this.bezierx! + this.t * this.t * this.curveEndx!
       );
       this.drawy = Math.round(
-        (1 - this.t) * (1 - this.t) * this.curveStarty! +
-          2 * (1 - this.t) * this.t * this.beziery! +
-          this.t * this.t * this.curveEndy!,
+        (1 - this.t) * (1 - this.t) * this.curveStarty! + 2 * (1 - this.t) * this.t * this.beziery! + this.t * this.t * this.curveEndy!
       );
 
       this.t += (this.speed / 100) * this.twdGameLoop.delta;
@@ -246,32 +213,28 @@ export class EnemyTank {
     if (!this.docurve) {
       if (
         this.drawx + this.canvasState.mainCanvasXOffset >
-        this.twdGrid.route[this.routeindex].drawx +
-          this.canvasState.mainCanvasXOffset
+        this.twdGrid.route[this.routeindex].drawx + this.canvasState.mainCanvasXOffset
       ) {
         this.drawx += -this.speed * this.twdGameLoop.delta;
       }
 
       if (
         this.drawx + this.canvasState.mainCanvasXOffset <
-        this.twdGrid.route[this.routeindex].drawx +
-          this.canvasState.mainCanvasXOffset
+        this.twdGrid.route[this.routeindex].drawx + this.canvasState.mainCanvasXOffset
       ) {
         this.drawx += this.speed * this.twdGameLoop.delta;
       }
 
       if (
         this.drawy + this.canvasState.mainCanvasYOffset >
-        this.twdGrid.route[this.routeindex].drawy +
-          this.canvasState.mainCanvasYOffset
+        this.twdGrid.route[this.routeindex].drawy + this.canvasState.mainCanvasYOffset
       ) {
         this.drawy += -this.speed * this.twdGameLoop.delta;
       }
 
       if (
         this.drawy + this.canvasState.mainCanvasYOffset <
-        this.twdGrid.route[this.routeindex].drawy +
-          this.canvasState.mainCanvasYOffset
+        this.twdGrid.route[this.routeindex].drawy + this.canvasState.mainCanvasYOffset
       ) {
         this.drawy += this.speed * this.twdGameLoop.delta;
       }
