@@ -11,7 +11,6 @@ export class TurretBullet extends Projectile {
   private x: number;
   private y: number;
   private enemyIndex: number;
-  private firstTime: boolean;
   private bulletIndex: number;
   private needdraw: boolean;
   private damage: number;
@@ -45,7 +44,6 @@ export class TurretBullet extends Projectile {
     this.x = 0;
     this.y = 0;
     this.enemyIndex = enemyIndex;
-    this.firstTime = true;
     this.bulletIndex = bulletIndex;
 
     this.needdraw = true;

@@ -12,10 +12,8 @@ export class NuclearBullet extends Projectile {
   private x: number;
   private y: number;
   private enemyIndex: number;
-  private firstTime: boolean;
   private bulletIndex: number;
   private needdraw: boolean;
-  private damage: number;
   private angle: number | null;
 
   private twdGrid: TowerDefenseGrid;
@@ -31,8 +29,7 @@ export class NuclearBullet extends Projectile {
     x: number,
     y: number,
     enemyIndex: number,
-    bulletIndex: number,
-    damage: number
+    bulletIndex: number
   ) {
     super();
 
@@ -46,12 +43,9 @@ export class NuclearBullet extends Projectile {
     this.x = 0;
     this.y = 0;
     this.enemyIndex = enemyIndex;
-    this.firstTime = true;
     this.bulletIndex = bulletIndex;
 
     this.needdraw = true;
-
-    this.damage = damage;
 
     const cellHeight = twdGrid.grid[this.gridX][this.gridY].height / 2;
     const cellWidth = twdGrid.grid[this.gridX][this.gridY].width / 2;
