@@ -50,8 +50,8 @@ export class AppComponent implements OnInit {
 
       this.gameLoopService.start();
 
-      interval(1000)
-        .pipe(take(1))
+      interval(1500)
+        .pipe(take(100))
         .subscribe(() => {
           this.enemyService.createEnemyTank(0, 1, 0);
         });
