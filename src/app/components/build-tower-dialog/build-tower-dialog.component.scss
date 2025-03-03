@@ -1,0 +1,41 @@
+.turret-container {
+  img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.upgrade-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.upgrade-info {
+  display: flex;
+  align-items: center; /* Centers content vertically */
+  justify-content: center; /* Centers content horizontally (optional) */
+  gap: 5px; /* Adds space between the icon and text */
+  width: 40px;
+}
+
+.layout-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows the layout to adjust based on available space */
+  gap: 20px; /* Adds space between the containers */
+}
+
+.custom-small-spinner {
+  width: 30px !important; /* Adjust the width */
+  height: 30px !important; /* Adjust the height */
+}
+
+.custom-small-spinner .mat-progress-spinner {
+  width: 30px !important; /* Inner spinner width */
+  height: 30px !important; /* Inner spinner height */
+}
+
+.not-selected {
+  opacity: 0.5;
+}

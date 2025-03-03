@@ -1,0 +1,47 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  "files.associations": { "*.scss": "postcss" },
+
+  "importSorter.generalConfiguration.sortOnBeforeSave": true,
+  "importSorter.generalConfiguration.exclude": [],
+  "importSorter.importStringConfiguration.trailingComma": "multiLine",
+  "importSorter.importStringConfiguration.tabSize": 2,
+  "importSorter.sortConfiguration.removeUnusedImports": true,
+  "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.count": 140,
+  "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.type": "newLineEachExpressionAfterCountLimitExceptIfOnlyOne",
+  "importSorter.sortConfiguration.importMembers.order": "lowercaseLast",
+  "importSorter.sortConfiguration.customOrderingRules.rules": [
+    {
+      "regex": "^[@]",
+      "orderLevel": 5
+    },
+    {
+      "type": "importMember",
+      "regex": "^$",
+      "orderLevel": 10,
+      "disableSort": true
+    },
+    {
+      "regex": "^[^.#]",
+      "orderLevel": 20
+    },
+    {
+      "regex": "^#",
+      "orderLevel": 30
+    },
+    {
+      "regex": "^[.][.]",
+      "orderLevel": 40
+    },
+    {
+      "regex": "^[.][^.]",
+      "orderLevel": 50
+    }
+  ],
+  "npm-scripts.showStartNotification": false,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

@@ -1,0 +1,22 @@
+<div class="flex-wrapper">
+  <div class="single-chart">
+    <svg viewBox="0 0 36 36" class="circular-chart orange">
+      <path
+        class="circle-bg"
+        d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831" />
+      <path
+        class="circle"
+        [attr.stroke-dasharray]="progression + ', 100'"
+        stroke-linecap="butt"
+        d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831" />
+
+      @if (image !== null) {
+        <image [attr.href]="image" x="6" y="6" width="24" height="24" preserveAspectRatio="xMidYMid meet" />
+      }
+    </svg>
+  </div>
+</div>

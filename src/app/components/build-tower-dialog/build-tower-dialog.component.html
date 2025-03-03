@@ -1,0 +1,33 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<h2 mat-dialog-title>Build a tower</h2>
+<mat-dialog-content disableRipple>
+  <div class="layout-container">
+    <div class="turret-container">
+      <p>Select a tower</p>
+
+      @for (item of turrets; track item.imageIndex) {
+        <img (click)="selectTurret(item)" [class.not-selected]="!item.selected" [src]="item.image" alt="{{ item.type }}" />
+      }
+    </div>
+    <div class="upgrades">
+      <p>Upgrade Options</p>
+      <div class="upgrade-options">
+        <div class="upgrade-item" *ngFor="let option of upgradeOptions">
+          <app-progression-circle [image]="option.icon" [progression]="20 * option.level" style="height: 35px; width: 35px">
+          </app-progression-circle>
+          <button mat-raised-button color="accent" (click)="upgrade(option)" class="upgrade-button">
+            <div class="upgrade-info">
+              <img src="./assets/money.png" width="20" height="20" alt="Money" />
+              <span>{{ option.upgradeCost ?? '-' }}</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button color="accent" (click)="cancel()">Cancel</button>
+  <button mat-button color="accent" (click)="buildTower()">Build</button>
+</mat-dialog-actions>

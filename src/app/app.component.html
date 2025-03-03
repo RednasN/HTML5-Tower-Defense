@@ -1,0 +1,17 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<app-game-canvas></app-game-canvas>
+
+<div class="summary" style="pointer-events: none">
+  <div style="float: left">
+    <img src="/assets/money.png" width="12" height="12" alt="Money" style="float: left; margin-top: 3px" />
+  </div>
+  <div id="pocket" style="float: left; margin-left: 3px">{{ money$ | async }}</div>
+</div>
+
+<div class="menu" style="background: rgba(0, 0, 0, 0.5)">
+  <img src="./assets/menu.svg" alt="Show menu" />
+  <img src="./assets/build.svg" (click)="buildTower()" alt="Build" />
+  <img src="./assets/play.svg" alt="play" />
+  <img src="./assets/speed-level-1.svg" alt="speed" />
+</div>

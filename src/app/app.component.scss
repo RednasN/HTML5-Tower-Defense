@@ -1,0 +1,47 @@
+@media all and (orientation: portrait) {
+  .menu {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0px;
+    bottom: 0px;
+    width: 100%; /* Full width */
+    height: 10%; /* Full height */
+    max-height: 50px;
+    color: white;
+  }
+
+  .menu img {
+    float: right;
+    margin-left: 10px;
+    height: 100%;
+  }
+}
+
+@media all and (orientation: landscape) {
+  .menu {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    right: 0px;
+    bottom: 0px;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    max-width: 50px;
+    color: white;
+  }
+
+  .menu img {
+    float: right;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.summary {
+  position: fixed;
+  z-index: 1;
+  left: 5px;
+  top: 5px;
+  width: 50px;
+  height: 20px;
+  color: white;
+}

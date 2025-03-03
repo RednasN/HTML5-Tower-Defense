@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.create-tower-dialog {
+  --mdc-dialog-container-color: rgba(0, 0, 0, 0.8);
+  --mdc-dialog-subhead-color: white;
+  --mdc-dialog-supporting-text-color: white;
+  --mdc-text-button-label-text-color: white;
+}
+
+.mat-dialog-container:focus {
+  outline: none; /* Removes the blue outline */
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
