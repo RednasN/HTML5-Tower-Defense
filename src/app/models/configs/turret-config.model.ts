@@ -126,7 +126,7 @@ export const laserTurretConfig: TurretConfig = {
     {
       type: UpgradeType.Range,
       details: [
-        { level: 1, cost: 10, value: 5000 },
+        { level: 1, cost: 10, value: 150 },
         { level: 2, cost: 20, value: 175 },
         { level: 3, cost: 30, value: 200 },
         { level: 4, cost: 40, value: 225 },
