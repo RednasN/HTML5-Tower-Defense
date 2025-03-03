@@ -35,3 +35,4 @@ A classic tower defense game, currently it's a very minimal game. It works best 
   - Level designer
 - Developing waves of enemies
 - Since everything has been migrated from an old (ancient) repo, a lot of refactoring needs to be done as well
+- Performance updates
