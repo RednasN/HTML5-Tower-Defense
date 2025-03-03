@@ -27,6 +27,7 @@ export class LaserService {
     const rad = Math.atan2(deltaY, deltaX);
 
     return {
+      duration: 10,
       type: ProjectileType.Laser,
       gridX: x,
       gridY: y,
@@ -42,12 +43,15 @@ export class LaserService {
   }
 
   public calculate(bullet: Laser): void {
+    bullet.duration--;
     const cell = this.gridService.grid[bullet.gridX][bullet.gridY];
     const enemy = this.enemyService.enemies[bullet.enemyIndex];
 
-    if (enemy.died) {
+    if (bullet.duration <= 0) {
       bullet.needdraw = false;
     }
+
+    enemy.lives -= bullet.damage;
 
     const cellHeight = cell.height / 2;
     const cellWidth = cell.width / 2;

@@ -1,27 +1,37 @@
-# TowerDefense
+# HTML5 Tower Defense
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.5.
+A classic tower defense game, currently it's a very minimal game. It works best on mobile environments or touch enabled emulation environments (e.g. Google Chrome developer mode supports this). A live demo can be found here: [**live demo**](https://rednasn.github.io/HTML5-Tower-Defense/).
 
-## Development server
+## Setup locally
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1. **Install Node.js and npm**  
+   If you don't have Node.js installed, download and install it from the [official Node.js website](https://nodejs.org/). This will also install `npm` (Node Package Manager), which is required for managing project dependencies.
 
-## Code scaffolding
+2. **Clone the repository**  
+   Clone this project repository to your local machine using Git or download it directly as a ZIP file and extract it.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+   ```bash
+   git clone https://github.com/rednasn/HTML5-Tower-Defense.git
+   cd HTML5-Tower-Defense``
 
-## Build
+   ```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+3. **Install dependencies**  
+   Use `npm` to install the necessary dependencies for the project:  
+   `npm install`
+4. **Run the development server**  
+   This project is build using Angular [Angular](https://angular.dev/). Start the development server using the following command:  
+   `ng serve`
+5. **Access the local server**  
+   Once the server is running, Vite will provide a local development URL. Typically, it will look like this:  
+   `http://localhost:4200/`
 
-## Running unit tests
+   Open this URL in your web browser to view the project.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Work in progress
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Developing more projectiles, weapons, enemies and explosions
+- More levels
+  - Level designer
+- Developing waves of enemies
+- Since everything has been migrated from an old (ancient) repo, a lot of refactoring needs to be done as well

@@ -50,6 +50,7 @@ export type Laser = BaseProjectTile & {
   needdraw: boolean;
   damage: number;
   angle: number | null;
+  duration: number;
   laserParts: LaserPart[];
 };
 

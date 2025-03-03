@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, from, interval, take } from 'rxjs';
+import { Observable, expand, from, take, timer } from 'rxjs';
 
 import { BuildTowerDialogComponent } from './components/build-tower-dialog/build-tower-dialog.component';
 import { GameCanvasComponent } from './components/game-canvas/game-canvas.component';
@@ -50,11 +50,18 @@ export class AppComponent implements OnInit {
 
       this.gameLoopService.start();
 
-      interval(1500)
-        .pipe(take(100))
+      timer(0)
+        .pipe(
+          expand(() => timer(getRandomInterval()).pipe(take(1))),
+          take(100)
+        )
         .subscribe(() => {
           this.enemyService.createEnemyTank(0, 1, 0);
         });
+
+      function getRandomInterval(): number {
+        return Math.floor(Math.random() * (5000 - 200 + 1)) + 200;
+      }
     });
   }
 

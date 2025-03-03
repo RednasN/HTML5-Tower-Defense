@@ -71,9 +71,10 @@ export class BuildTowerDialogComponent implements OnInit {
   }
 
   public upgrade(option: UpgradeDetails): void {
-    option.level++;
-
-    this.updateUpgradeOptions();
+    if (option.level <= 5) {
+      option.level++;
+      this.updateUpgradeOptions();
+    }
   }
 
   public selectTurret(turret: Turret): void {

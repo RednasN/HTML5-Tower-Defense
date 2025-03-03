@@ -76,7 +76,7 @@ export const rocketLauncherConfig: TurretConfig = {
         { level: 2, cost: 20, value: 1400 },
         { level: 3, cost: 30, value: 1300 },
         { level: 4, cost: 40, value: 1250 },
-        { level: 5, cost: 50, value: 1200 },
+        { level: 5, cost: 50, value: 200 },
       ],
     },
   ],

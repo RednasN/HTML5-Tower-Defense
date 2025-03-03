@@ -31,14 +31,12 @@ export class ExplosionService {
 
   public draw(): void {
     this.explosions.forEach(explosion => {
-      try {
+      if (this.imageService.explosions[explosion.explosionListIndex].images[explosion.explosionIndex] !== undefined) {
         this.canvasService.draw(
           this.imageService.explosions[explosion.explosionListIndex].images[explosion.explosionIndex],
           Math.round(explosion.drawx) + this.canvasService.mainCanvasXOffset,
           Math.round(explosion.drawy) + this.canvasService.mainCanvasYOffset
         );
-      } catch (err) {
-        console.log('Error!', err);
       }
     });
   }
