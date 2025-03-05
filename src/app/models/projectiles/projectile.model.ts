@@ -4,6 +4,8 @@ export enum ProjectileType {
   Rocket = 'Rocket',
   Bullet = 'Bullet',
   Laser = 'Laser',
+  NuclearBullet = 'NuclearBullet',
+  SlowRocket = 'SlowRocket',
 }
 
 export type BaseProjectTile = {
@@ -17,7 +19,6 @@ export type Rocket = BaseProjectTile & {
   x: number;
   y: number;
   enemyIndex: number;
-  bulletIndex: number;
   angle: number;
   locked: boolean;
   needdraw: boolean;
@@ -27,16 +28,16 @@ export type Rocket = BaseProjectTile & {
 };
 
 export type Bullet = BaseProjectTile & {
-  type: ProjectileType.Bullet;
+  type: ProjectileType.Bullet | ProjectileType.SlowRocket | ProjectileType.NuclearBullet;
   gridY: number;
   gridX: number;
   x: number;
   y: number;
   enemyIndex: number;
-  bulletIndex: number;
   needdraw: boolean;
   damage: number;
   angle: number | null;
+  speed: number;
 };
 
 export type Laser = BaseProjectTile & {
@@ -46,7 +47,6 @@ export type Laser = BaseProjectTile & {
   x: number;
   y: number;
   enemyIndex: number;
-  bulletIndex: number;
   needdraw: boolean;
   damage: number;
   angle: number | null;

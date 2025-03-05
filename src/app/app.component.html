@@ -12,6 +12,6 @@
 <div class="menu" style="background: rgba(0, 0, 0, 0.5)">
   <img src="./assets/menu.svg" alt="Show menu" />
   <img src="./assets/build.svg" (click)="buildTower()" alt="Build" />
-  <img src="./assets/play.svg" alt="play" />
-  <img src="./assets/speed-level-1.svg" alt="speed" />
+  <img src="./assets/{{ paused ? 'pause' : 'play' }}.svg" (click)="togglePause()" alt="play" />
+  <img src="./assets/speed-level-{{ speed }}.svg" (click)="changeSpeed()" alt="speed" />
 </div>

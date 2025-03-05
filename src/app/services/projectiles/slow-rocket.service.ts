@@ -12,7 +12,7 @@ export class SlowRocketService {
   private readonly gridServcie = inject(GridService);
   private readonly enemyService = inject(EnemyService);
 
-  public create(x: number, y: number, enemyIndex: number, bulletIndex: number, angle: number, damage: number): Rocket {
+  public create(x: number, y: number, enemyIndex: number, angle: number, damage: number): Rocket {
     const cellHeight = this.gridServcie.grid[x][y].height / 2;
     const cellWidth = this.gridServcie.grid[x][y].width / 2;
 
@@ -29,7 +29,6 @@ export class SlowRocketService {
       x: initialX,
       y: initialY,
       enemyIndex,
-      bulletIndex,
       angle,
       locked: false,
       needdraw: true,

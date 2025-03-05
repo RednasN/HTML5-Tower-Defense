@@ -27,16 +27,9 @@ export class RocketLauncherService extends WeaponService {
     super(gridService, canvasService, enemyService, turretConfigService); // Pass dependencies to the abstract class
   }
 
-  public override create(
-    x: number,
-    y: number,
-    imageIndex: number,
-    speedLevel: number,
-    powerLevel: number,
-    rangeLevel: number
-  ): RocketLauncher {
+  public override create(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): RocketLauncher {
     const launcher: RocketLauncher = {
-      ...super.create(x, y, imageIndex, speedLevel, powerLevel, rangeLevel),
+      ...super.create(x, y, speedLevel, powerLevel, rangeLevel),
       type: WeaponType.RocketLauncher,
       range: 1000,
       damage: 1,
@@ -76,7 +69,7 @@ export class RocketLauncherService extends WeaponService {
 
   public shoot(weapon: RocketLauncher): void {
     const angle = weapon.canons[Math.floor(Math.random() * weapon.canons.length)];
-    const rocket = this.rocketService.create(weapon.gridX, weapon.gridY, weapon.focusedIndex, 1, angle, weapon.damage);
+    const rocket = this.rocketService.create(weapon.gridX, weapon.gridY, weapon.focusedIndex, angle, weapon.damage);
     this.projectileService.addProjectile(rocket);
   }
 }

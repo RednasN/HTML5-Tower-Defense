@@ -16,7 +16,7 @@ export abstract class WeaponService {
     protected readonly turretConfigService: TurretConfigService
   ) {}
 
-  public create(x: number, y: number, imageIndex: number, speedLevel: number, powerLevel: number, rangeLevel: number): Weapon {
+  public create(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): Weapon {
     return {
       type: WeaponType.Base,
       rangeLevel,
@@ -27,7 +27,6 @@ export abstract class WeaponService {
       speed: 0,
       gridX: x,
       gridY: y,
-      imageIndex,
       focusedIndex: -1,
       focusedIndexes: [],
       startx: null,

@@ -156,6 +156,43 @@ export const laserTurretConfig: TurretConfig = {
   ],
 };
 
+export const slowRocketLauncherConfig: TurretConfig = {
+  type: WeaponType.SlowRocketLauncher,
+  cost: 25,
+  upgrades: [
+    {
+      type: UpgradeType.Range,
+      details: [
+        { level: 1, cost: 10, value: 300 },
+        { level: 2, cost: 20, value: 350 },
+        { level: 3, cost: 30, value: 400 },
+        { level: 4, cost: 40, value: 450 },
+        { level: 5, cost: 50, value: 500 },
+      ],
+    },
+    {
+      type: UpgradeType.Damage,
+      details: [
+        { level: 1, cost: 10, value: 1 },
+        { level: 2, cost: 20, value: 2 },
+        { level: 3, cost: 30, value: 3 },
+        { level: 4, cost: 40, value: 4 },
+        { level: 5, cost: 50, value: 5 },
+      ],
+    },
+    {
+      type: UpgradeType.Speed,
+      details: [
+        { level: 1, cost: 10, value: 2000 },
+        { level: 2, cost: 20, value: 1750 },
+        { level: 3, cost: 30, value: 1500 },
+        { level: 4, cost: 40, value: 1300 },
+        { level: 5, cost: 50, value: 1200 },
+      ],
+    },
+  ],
+};
+
 export const nuclearLauncherConfig: TurretConfig = {
   type: WeaponType.NuclearLauncher,
   cost: 25,
@@ -203,6 +240,8 @@ export function getTurretConfig(type: WeaponType): TurretConfig {
       return laserTurretConfig;
     case WeaponType.NuclearLauncher:
       return nuclearLauncherConfig;
+    case WeaponType.SlowRocketLauncher:
+      return slowRocketLauncherConfig;
     default:
       throw new Error('Invalid turret type');
   }

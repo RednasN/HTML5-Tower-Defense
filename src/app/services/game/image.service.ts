@@ -2,13 +2,34 @@ import { Injectable } from '@angular/core';
 
 import { TO_RADIANS } from '../../models/constants';
 import { RotateImage } from '../../models/image.model';
+import { ProjectileType } from '../../models/projectiles/projectile.model';
+import { WeaponType } from '../../models/weapons/weapon.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ImageService {
-  public towers: RotateImage[] = [];
-  public bullets: RotateImage[] = [];
+  //public towers: RotateImage[] = [];
+  //public bullets: RotateImage[] = [];
+
+  public towers: Record<WeaponType, ImageBitmap[]> = {
+    [WeaponType.Base]: [],
+    [WeaponType.RocketLauncher]: [],
+    [WeaponType.BulletShooter]: [],
+    [WeaponType.NuclearLauncher]: [],
+    [WeaponType.MultiRocketLauncher]: [],
+    [WeaponType.LaserTurret]: [],
+    [WeaponType.SlowRocketLauncher]: [],
+  };
+
+  public bullets: Record<ProjectileType, ImageBitmap[]> = {
+    [ProjectileType.Base]: [],
+    [ProjectileType.Rocket]: [],
+    [ProjectileType.Bullet]: [],
+    [ProjectileType.Laser]: [],
+    [ProjectileType.NuclearBullet]: [],
+    [ProjectileType.SlowRocket]: [],
+  };
 
   public enemies: RotateImage[] = [];
   public explosions: RotateImage[] = [];
@@ -18,24 +39,34 @@ export class ImageService {
   public imgBlackTransparent: ImageBitmap | null = null;
 
   public async setupTowers(): Promise<void> {
-    await Promise.all([
-      await this.calculateRotateImagesAsync('BasicTower', './assets/turrets/turret.png', this.towers),
-      await this.calculateRotateImagesAsync('RocketLauncher', './assets/turrets/rocket-launcher-basic.png', this.towers),
-      await this.calculateRotateImagesAsync('NuclearLauncher', './assets/turrets/nuclear-turret.png', this.towers),
-      await this.calculateRotateImagesAsync('MultiRocketLauncher', './assets/turrets/multi-rocket-launcher.png', this.towers),
-      await this.calculateRotateImagesAsync('LaserShooter', './assets/turrets/laser-shooter.png', this.towers),
-    ]);
+    const towerConfigs = [
+      { type: WeaponType.BulletShooter, path: './assets/turrets/turret.png' },
+      { type: WeaponType.RocketLauncher, path: './assets/turrets/rocket-launcher-basic.png' },
+      { type: WeaponType.NuclearLauncher, path: './assets/turrets/nuclear-turret.png' },
+      { type: WeaponType.MultiRocketLauncher, path: './assets/turrets/multi-rocket-launcher.png' },
+      { type: WeaponType.LaserTurret, path: './assets/turrets/laser-shooter.png' },
+      { type: WeaponType.SlowRocketLauncher, path: './assets/turrets/slow-turret.png' },
+    ];
 
-    //this.addTower('./assets/turrets/turret.png', 0, 25);
-    //this.addTower('./assets/turrets/rocket-launcher-basic.png', 1, 100);
-    //this.addTower('./assets/turrets/nuclear-turret.png', 2, 100);
-    //this.addTower('./assets/turrets/multi-rocket-launcher.png', 3, 100);
+    // Loop through each tower config and await image calculation
+    for (const tower of towerConfigs) {
+      console.log('Loading Tower: ', tower.type);
+
+      const images = await this.calculateRotateImagesAsync(tower.path);
+      this.towers[tower.type] = images;
+
+      console.log('Finished loading Tower: ', tower.type);
+    }
 
     console.log('Finished loading Towers');
   }
 
   public async setupEnemies(): Promise<void> {
-    await this.calculateRotateImagesAsync('BasicEnemy', imgEnemy_Basic, this.enemies);
+    console.log('Loading Enemies');
+
+    await this.calculateRotateImagesAsync(imgEnemy_Basic).then(images => {
+      this.enemies = [{ name: 'BasicEnemy', images }];
+    });
 
     console.log('Finished loading Enemies');
   }
@@ -57,10 +88,23 @@ export class ImageService {
   }
 
   public async setupBullets(): Promise<void> {
-    await this.calculateRotateImagesAsync('BasicBullet', './assets/bullets/basic-bullet.png', this.bullets, 50, 50);
-    await this.calculateRotateImagesAsync('Rocket', imgRocket_Basic, this.bullets, 50, 50);
-    await this.calculateRotateImagesAsync('NuclearGrenade', nuclear_bullet, this.bullets, 50, 50);
-    await this.calculateRotateImagesAsync('LaserShooter', './assets/bullets/laser-beam.png', this.bullets, 32, 32);
+    const bulletTypes = [
+      { type: ProjectileType.Bullet, path: './assets/bullets/basic-bullet.png', width: 50, height: 50 },
+      { type: ProjectileType.Rocket, path: './assets/bullets/basic-rocket.png', width: 50, height: 50 },
+      { type: ProjectileType.NuclearBullet, path: './assets/bullets/nuclear-bullet.png', width: 50, height: 50 },
+      { type: ProjectileType.Laser, path: './assets/bullets/laser-beam.png', width: 32, height: 32 },
+      { type: ProjectileType.SlowRocket, path: './assets/bullets/big-rocket.png', width: 50, height: 50 },
+    ];
+
+    // Loop over bullet types and await each image calculation
+    for (const bullet of bulletTypes) {
+      console.log('Loading bullet: ', bullet.type);
+
+      const images = await this.calculateRotateImagesAsync(bullet.path, bullet.width, bullet.height);
+      this.bullets[bullet.type] = images;
+
+      console.log('Finished loading bullet: ', bullet.type);
+    }
 
     console.log('Finished loading bullets');
   }
@@ -172,20 +216,13 @@ export class ImageService {
     destination.push(item);
   }
 
-  public async calculateRotateImagesAsync(
-    name: string,
-    imagesrc: string,
-    destination: RotateImage[],
-    drawheight = 50,
-    drawwidth = 50
-  ): Promise<void> {
-    const images: ImageBitmap[] = [];
-    const image = new Image();
+  public async calculateRotateImagesAsync(imagesrc: string, drawheight = 50, drawwidth = 50): Promise<ImageBitmap[]> {
+    return new Promise<ImageBitmap[]>((resolve, reject) => {
+      const offscreenCanvas = new OffscreenCanvas(drawheight, drawwidth);
+      const imageCtx = offscreenCanvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
+      const images: ImageBitmap[] = [];
+      const image = new Image();
 
-    const offscreenCanvas = new OffscreenCanvas(drawheight, drawwidth);
-    const imageCtx = offscreenCanvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
-
-    await new Promise<void>((resolve, reject) => {
       image.onload = async () => {
         for (let i = 0; i < 360; i++) {
           imageCtx.clearRect(0, 0, drawheight, drawwidth);
@@ -199,28 +236,17 @@ export class ImageService {
           images.push(imageBitmap);
         }
 
-        resolve();
+        resolve(images);
       };
 
       image.onerror = err => reject(err);
       image.src = imagesrc;
     });
-
-    const towerImage = {
-      name: name,
-      images: images,
-    };
-
-    destination.push(towerImage);
   }
 }
 
 const imgEnemy_Basic =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABaUlEQVRoQ+2ZTRLCIAyFy7KrnscZj+HGS3gAD+ABvIQbj+GM5+mqSxypZSpQIJA4No1LoYEv7yX0RzVMfooJRyMg/6akKLIVRTQxqOckKmvp4UGD0u5NXAGBppePtW671oM/PoegLaBZCs0nqxEBKZRHFEkkTrOxVgSUxAXYQU3b1adukUNd+2kMdW3MYDoG4JJ9gNDWxwoEgrCSjOqg7AEjSBEENkwtSBUEJsymQewNIaS4Uwf2rJsV1Q1EkbG1dmNrVX0fbbOpjYe62HA5mL/b890bTsXLAfkCsL4mBHE37YAF97wpkClBq7eWq/Tqiz1Ub3KOzLOCcd+VU+ypzlelCgZE0cGzQFUEgwWBCWLOSshJjwmBDWJgODxYzV0Xe0GHUZeew0mCvpVh8/JBQFLNfmFcrJVIHJ8aKXRI7mXyoSc3U/bZhc2nNyg5cP7PrAXcV/10qvZbvzNgBAEBJox8uihCnmLgAi/Wd5ozikmVGAAAAABJRU5ErkJgggAA';
-const imgRocket_Basic =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABDklEQVRoQ+2UsQqCUBiFf6FaJGwLnFrcoqClF+g5erVeoTmCtvZaWxxCaIkWESQo7nAlyJYjB+JyWgTlHDzfdy2yQH5RIDtMQ/7NpIzICImAjhYJLFwrIzA6UlBGSGDhWhmB0ZGCMkICC9fKCIyOFJQREli4VkY8umo6fCW7u6X73IrVBLrm66wz0E4FbsRgNLfl5mrl+Gnxrfd1PceXZtyszJrnn/c9hDrtw+8DB/2I+nGyxTFpHfFrnLtfbQ+tBtEx8BB3tIIwEtQ3Av9XEoKdjhbhfeBKDYHRkYIyQgIL18oIjI4UlBESWLhWRmB0pKCMkMDCtTICoyMFZYQEFq6VERgdKSgjJLBwbTBG3veimTPnXcJeAAAAAElFTkSuQmCC';
-const nuclear_bullet =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAA50lEQVRoQ+2WQQ6DMAwEk1vVh/KoPrTqLRUHqgqKsoq8Fo2GK47D7ARDLZNcdRKOAsjVTGIEI6YEOFqmYIfbYmQ4OtNCjJiCHW6LkeHoTAsxYgp2uC1GetG18mr7mlputuAsjVeIujwPrO1xLy6YcJAziI3KBRMK0oNwwoSBqBAuGED2bzJGenNcvM/R+hWUerwcIzjMyGcanXwMXdNq6xsOsjae4sv+bebv/7XEQRNaZjlaoU8oNgNEDCqtDCNpUYsbYUQMKq0MI2lRixthRAwqrQwjaVGLG2FEDCqtDCNpUYsbTWPkDbf5SDM7/rw/AAAAAElFTkSuQmCC';
 const imgSurrounderSrc =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAA2klEQVRoQ+2aywrCMBBFbygogj/kzk935w8JolAiXQRKfUAwY2/kdJNdyeSeOVlMUpbyfZQ2g9Tzmm6jcu9FTPtPJGKG41Mix6t02knu67IdXvaIexFlf/NiSMQBv6pEtoOSDL7DRXl+eNU9ct57FDLdd8veJZE1CSOR0lj0SGMOsVZRHfdIY7SwFtZqjFT5HdbCWkFoYS2sFYQW1sJaQWhhLawVhBbWwlpBaGEtrBWEFtbCWkFofW0t18Fo9cTKYVb47jCrJlYk8oNHBx8T6fWBDa+D3JL7m0Qe7HvOOT05TSIAAAAASUVORK5CYII=';
 const imgBlackTransparentSrc =

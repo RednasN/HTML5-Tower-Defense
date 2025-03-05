@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
+import { ProjectileType } from '../../models/projectiles/projectile.model';
 import { NuclearLauncher, WeaponType } from '../../models/weapons/weapon.model';
 import { EnemyService } from '../enemies/enemy.service';
 import { CanvasService } from '../game/canvas.service';
@@ -26,15 +27,8 @@ export class NuclearLauncherService extends WeaponService {
     super(gridService, canvasService, enemyService, turretConfigService);
   }
 
-  public override create(
-    x: number,
-    y: number,
-    imageIndex: number,
-    speedLevel: number,
-    powerLevel: number,
-    rangeLevel: number
-  ): NuclearLauncher {
-    const baseWeapon = super.create(x, y, imageIndex, speedLevel, powerLevel, rangeLevel);
+  public override create(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): NuclearLauncher {
+    const baseWeapon = super.create(x, y, speedLevel, powerLevel, rangeLevel);
 
     const weapon: NuclearLauncher = {
       ...baseWeapon,
@@ -48,7 +42,14 @@ export class NuclearLauncherService extends WeaponService {
   }
 
   public shoot(weapon: NuclearLauncher): void {
-    const bullet = this.turretBulletService.create(weapon.gridX, weapon.gridY, weapon.focusedIndex, 2, weapon.damage);
+    const bullet = this.turretBulletService.create(
+      ProjectileType.NuclearBullet,
+      weapon.gridX,
+      weapon.gridY,
+      weapon.focusedIndex,
+      weapon.damage,
+      250
+    );
     this.projectileService.addProjectile(bullet);
   }
 }

@@ -33,7 +33,11 @@ export class ProjectileService {
         this.rocketService.calculate(projectile);
       }
 
-      if (projectile.type === ProjectileType.Bullet) {
+      if (
+        projectile.type === ProjectileType.Bullet ||
+        projectile.type === ProjectileType.SlowRocket ||
+        projectile.type === ProjectileType.NuclearBullet
+      ) {
         this.turretBulletService.calculate(projectile);
       }
 
@@ -47,7 +51,7 @@ export class ProjectileService {
     this.projectiles.forEach(projectile => {
       if (projectile.needdraw) {
         try {
-          const image = this.imageService.bullets[projectile.bulletIndex].images[Math.floor(projectile.angle ?? 0)];
+          const image = this.imageService.bullets[projectile.type][Math.floor(projectile.angle ?? 0)];
 
           switch (projectile.type) {
             case ProjectileType.Laser: {
@@ -58,12 +62,6 @@ export class ProjectileService {
                   laserPart.y + this.canvasService.mainCanvasYOffset
                 );
               }
-
-              //this.canvasService.draw(
-              //  image,
-              //  projectile.x + this.canvasService.mainCanvasXOffset,
-              //  projectile.y + this.canvasService.mainCanvasYOffset
-              //);
               break;
             }
 

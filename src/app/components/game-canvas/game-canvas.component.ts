@@ -4,7 +4,6 @@ import { ChangeDetectionStrategy, Component, HostListener, OnInit, inject } from
 import { Cell } from '../../models/grid/grid';
 import { CanvasService } from '../../services/game/canvas.service';
 import { GridService } from '../../services/game/grid.service';
-import { MenuService } from '../../services/game/menu.service';
 
 @Component({
   selector: 'app-game-canvas',
@@ -17,7 +16,6 @@ export class GameCanvasComponent implements OnInit {
   title = 'TowerDefense';
 
   private readonly canvasService = inject(CanvasService);
-  private readonly menuService = inject(MenuService);
   private readonly gridService = inject(GridService);
 
   public ngOnInit(): void {

@@ -27,15 +27,8 @@ export class LaserTurretService extends WeaponService {
     super(gridService, canvasService, enemyService, turretConfigService);
   }
 
-  public override create(
-    x: number,
-    y: number,
-    imageIndex: number,
-    speedLevel: number,
-    powerLevel: number,
-    rangeLevel: number
-  ): LaserTurret {
-    const baseWeapon = super.create(x, y, imageIndex, speedLevel, powerLevel, rangeLevel);
+  public override create(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): LaserTurret {
+    const baseWeapon = super.create(x, y, speedLevel, powerLevel, rangeLevel);
 
     const weapon: LaserTurret = {
       ...baseWeapon,
@@ -60,7 +53,7 @@ export class LaserTurretService extends WeaponService {
   }
 
   public shoot(weapon: LaserTurret): void {
-    const laser = this.laserService.create(weapon.gridX, weapon.gridY, weapon.focusedIndex, 3, weapon.damage);
+    const laser = this.laserService.create(weapon.gridX, weapon.gridY, weapon.focusedIndex, weapon.damage);
     this.projectileService.addProjectile(laser);
   }
 }

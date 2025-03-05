@@ -19,7 +19,7 @@ export class CanvasService {
   public initialize(): void {
     this.mainCanvas = document.getElementById('towerDefenseView') as HTMLCanvasElement;
     this.mainCtx = this.mainCanvas.getContext('2d') as CanvasRenderingContext2D;
-    this.mainCtx.fillStyle = 'grey';
+
     this.calculateSize();
   }
 
@@ -48,7 +48,6 @@ export class CanvasService {
     if (image === null) {
       return;
     }
-
     this.mainCtx.drawImage(image, Math.floor(x), Math.floor(y));
   }
 

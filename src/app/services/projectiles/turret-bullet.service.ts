@@ -12,7 +12,14 @@ export class TurretBulletService {
   private readonly gridService = inject(GridService);
   private readonly enemyService = inject(EnemyService);
 
-  public create(x: number, y: number, enemyIndex: number, bulletIndex: number, damage: number): Bullet {
+  public create(
+    type: ProjectileType.Bullet | ProjectileType.SlowRocket | ProjectileType.NuclearBullet,
+    x: number,
+    y: number,
+    enemyIndex: number,
+    damage: number,
+    speed: number
+  ): Bullet {
     const cellHeight = this.gridService.grid[x][y].height / 2;
     const cellWidth = this.gridService.grid[x][y].width / 2;
 
@@ -28,15 +35,15 @@ export class TurretBulletService {
     const rad = Math.atan2(deltaY, deltaX);
 
     return {
-      type: ProjectileType.Bullet,
+      speed,
+      damage,
+      type: type,
       gridX: x,
       gridY: y,
       x: centerTurretX - 25 * Math.cos(rad),
       y: centerTurretY - 25 * Math.sin(rad),
       enemyIndex,
-      bulletIndex,
       needdraw: true,
-      damage,
       angle: null,
     };
   }
@@ -56,8 +63,8 @@ export class TurretBulletService {
         bullet.angle = 359;
       }
 
-      bullet.x = bullet.x - 250 * delta * Math.cos(rad);
-      bullet.y = bullet.y - 250 * delta * Math.sin(rad);
+      bullet.x = bullet.x - bullet.speed * delta * Math.cos(rad);
+      bullet.y = bullet.y - bullet.speed * delta * Math.sin(rad);
 
       if (Math.abs(bullet.x - centerEnemyX) < 10 && Math.abs(bullet.y - centerEnemyY) < 10) {
         bullet.needdraw = false;

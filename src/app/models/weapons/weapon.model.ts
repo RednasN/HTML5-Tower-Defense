@@ -7,6 +7,7 @@ export enum WeaponType {
   NuclearLauncher = 'NuclearLauncher',
   MultiRocketLauncher = 'MultiRocketLauncher',
   LaserTurret = 'LaserTurret',
+  SlowRocketLauncher = 'SlowRocketLauncher',
 }
 
 export type Weapon = {
@@ -26,8 +27,6 @@ export type Weapon = {
   focusedIndexes: number[];
 
   locked: boolean;
-
-  imageIndex: number;
 
   startx: number | null;
   starty: number | null;
@@ -53,6 +52,10 @@ export type LaserTurret = Weapon & {
   duration: number;
 };
 
+export type SlowRocketLauncher = Weapon & {
+  type: WeaponType.SlowRocketLauncher;
+};
+
 export function isRocketLauncher(weapon: Weapon): weapon is RocketLauncher {
   return weapon.type === WeaponType.RocketLauncher;
 }
@@ -67,4 +70,8 @@ export function isLaserTurret(weapon: Weapon): weapon is LaserTurret {
 
 export function isNucleareLauncher(weapon: Weapon): weapon is NuclearLauncher {
   return weapon.type === WeaponType.NuclearLauncher;
+}
+
+export function isSlowRocketLauncher(weapon: Weapon): weapon is SlowRocketLauncher {
+  return weapon.type === WeaponType.SlowRocketLauncher;
 }

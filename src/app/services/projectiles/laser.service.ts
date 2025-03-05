@@ -11,7 +11,7 @@ export class LaserService {
   private readonly gridService = inject(GridService);
   private readonly enemyService = inject(EnemyService);
 
-  public create(x: number, y: number, enemyIndex: number, bulletIndex: number, damage: number): Laser {
+  public create(x: number, y: number, enemyIndex: number, damage: number): Laser {
     const cellHeight = this.gridService.grid[x][y].height / 2;
     const cellWidth = this.gridService.grid[x][y].width / 2;
 
@@ -34,7 +34,6 @@ export class LaserService {
       x: centerTurretX - 25 * Math.cos(rad),
       y: centerTurretY - 25 * Math.sin(rad),
       enemyIndex,
-      bulletIndex,
       needdraw: true,
       damage,
       angle: null,

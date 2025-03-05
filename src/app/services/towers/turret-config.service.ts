@@ -8,6 +8,7 @@ import {
   laserTurretConfig,
   nuclearLauncherConfig,
   rocketLauncherConfig,
+  slowRocketLauncherConfig,
 } from '../../models/configs/turret-config.model';
 import { WeaponType } from '../../models/weapons/weapon.model';
 
@@ -28,6 +29,7 @@ export class TurretConfigService {
     this.turretConfigs.push(bulletShooterConfig);
     this.turretConfigs.push(laserTurretConfig);
     this.turretConfigs.push(nuclearLauncherConfig);
+    this.turretConfigs.push(slowRocketLauncherConfig);
   }
 
   public getTurretSpecification(turretType: WeaponType, speedLevel: number, rangeLevel: number, damageLevel: number): TurretSpecification {

@@ -52,4 +52,8 @@ export class EnemyService {
   public hit(enemyIndex: number, hit: number): void {
     this.enemyTankService.hit(this.enemies[enemyIndex], hit);
   }
+
+  public getFirstEnemyAlive(): EnemyTank | undefined {
+    return this.enemies.find(enemy => enemy.lives > 0);
+  }
 }

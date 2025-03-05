@@ -12,7 +12,7 @@ export class RocketService {
   private readonly gridServcie = inject(GridService);
   private readonly enemyService = inject(EnemyService);
 
-  public create(x: number, y: number, enemyIndex: number, bulletIndex: number, angle: number, damage: number): Rocket {
+  public create(x: number, y: number, enemyIndex: number, angle: number, damage: number): Rocket {
     const cellHeight = this.gridServcie.grid[x][y].height / 2;
     const cellWidth = this.gridServcie.grid[x][y].width / 2;
 
@@ -29,7 +29,6 @@ export class RocketService {
       x: initialX,
       y: initialY,
       enemyIndex,
-      bulletIndex,
       angle,
       locked: false,
       needdraw: true,
@@ -42,8 +41,10 @@ export class RocketService {
   public calculate(rocket: Rocket): void {
     if (!rocket.needdraw) return;
 
-    const centerEnemyX = this.enemyService.enemies[rocket.enemyIndex].drawx + 25;
-    const centerEnemyY = this.enemyService.enemies[rocket.enemyIndex].drawy + 25;
+    const enemy = this.enemyService.enemies[rocket.enemyIndex];
+
+    const centerEnemyX = enemy.drawx + 25;
+    const centerEnemyY = enemy.drawy + 25;
 
     const deltaX = rocket.x - centerEnemyX;
     const deltaY = rocket.y - centerEnemyY;

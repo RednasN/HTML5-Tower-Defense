@@ -27,7 +27,6 @@ type UpgradeDetails = {
 export type Turret = {
   image: string;
   selected: boolean;
-  imageIndex: number;
   type: WeaponType;
 };
 
@@ -71,7 +70,7 @@ export class BuildTowerDialogComponent implements OnInit {
   }
 
   public upgrade(option: UpgradeDetails): void {
-    if (option.level <= 5) {
+    if (option.level < 5) {
       option.level++;
       this.updateUpgradeOptions();
     }
@@ -101,13 +100,15 @@ export class BuildTowerDialogComponent implements OnInit {
     const selectedCell = this.gridService.selectedCell;
 
     if (selectedTurret.type === WeaponType.BulletShooter) {
-      this.towerService.createBulletShooter(selectedCell!.x, selectedCell!.y, 0, speedLevel, powerLevel, rangeLevel);
+      this.towerService.createBulletShooter(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
     } else if (selectedTurret.type === WeaponType.RocketLauncher) {
-      this.towerService.createRocketLauncher(selectedCell!.x, selectedCell!.y, 1, speedLevel, powerLevel, rangeLevel);
+      this.towerService.createRocketLauncher(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
     } else if (selectedTurret.type === WeaponType.LaserTurret) {
-      this.towerService.createLaserTurret(selectedCell!.x, selectedCell!.y, 4, speedLevel, powerLevel, rangeLevel);
+      this.towerService.createLaserTurret(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
     } else if (selectedTurret.type === WeaponType.NuclearLauncher) {
-      this.towerService.createNuclearLauncher(selectedCell!.x, selectedCell!.y, 2, speedLevel, powerLevel, rangeLevel);
+      this.towerService.createNuclearLauncher(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
+    } else if (selectedTurret.type === WeaponType.SlowRocketLauncher) {
+      this.towerService.createSlowRocketLauncher(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
     }
 
     this.dialogRef.close();
@@ -115,11 +116,12 @@ export class BuildTowerDialogComponent implements OnInit {
 
   private createTowerOptions(): void {
     this.turrets = [
-      { type: WeaponType.BulletShooter, image: './assets/turrets/turret.png', selected: false, imageIndex: 0 },
-      { type: WeaponType.RocketLauncher, image: './assets/turrets/rocket-launcher-basic.png', selected: false, imageIndex: 1 },
-      { type: WeaponType.NuclearLauncher, image: './assets/turrets/nuclear-turret.png', selected: false, imageIndex: 2 },
-      { type: WeaponType.MultiRocketLauncher, image: './assets/turrets/multi-rocket-launcher.png', selected: false, imageIndex: 3 },
-      { type: WeaponType.LaserTurret, image: './assets/turrets/laser-shooter.png', selected: false, imageIndex: 4 },
+      { type: WeaponType.BulletShooter, image: './assets/turrets/turret.png', selected: false },
+      { type: WeaponType.RocketLauncher, image: './assets/turrets/rocket-launcher-basic.png', selected: false },
+      { type: WeaponType.NuclearLauncher, image: './assets/turrets/nuclear-turret.png', selected: false },
+      // { type: WeaponType.MultiRocketLauncher, image: './assets/turrets/multi-rocket-launcher.png', selected: false, imageIndex: 3 },
+      { type: WeaponType.LaserTurret, image: './assets/turrets/laser-shooter.png', selected: false },
+      { type: WeaponType.SlowRocketLauncher, image: './assets/turrets/slow-turret.png', selected: false },
     ];
   }
 
@@ -148,26 +150,4 @@ export class BuildTowerDialogComponent implements OnInit {
 
     currentRangeStats!.upgradeCost = rangeUpgradeOption?.cost;
   }
-
-  // private updateUpgradeOptions(turretType: WeaponType): void {
-  //   const turretConfig = getTurretConfig(turretType);
-
-  //   this.upgradeOptions.find(x => x.type === UpgradeType.Speed)!.details = turretConfig.upgrades
-  //     .find(x => x.type === UpgradeType.Speed)!
-  //     .details.map(x => {
-  //       return { level: x.level, cost: x.cost };
-  //     });
-
-  //   this.upgradeOptions.find(x => x.type === UpgradeType.Damage)!.details = turretConfig.upgrades
-  //     .find(x => x.type === UpgradeType.Damage)!
-  //     .details.map(x => {
-  //       return { level: x.level, cost: x.cost };
-  //     });
-
-  //   this.upgradeOptions.find(x => x.type === UpgradeType.Range)!.details = turretConfig.upgrades
-  //     .find(x => x.type === UpgradeType.Range)!
-  //     .details.map(x => {
-  //       return { level: x.level, cost: x.cost };
-  //     });
-  // }
 }

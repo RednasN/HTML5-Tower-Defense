@@ -6,7 +6,7 @@
     <div class="turret-container">
       <p>Select a tower</p>
 
-      @for (item of turrets; track item.imageIndex) {
+      @for (item of turrets; track item.type) {
         <img (click)="selectTurret(item)" [class.not-selected]="!item.selected" [src]="item.image" alt="{{ item.type }}" />
       }
     </div>
