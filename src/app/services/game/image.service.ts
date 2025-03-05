@@ -64,7 +64,7 @@ export class ImageService {
   public async setupEnemies(): Promise<void> {
     console.log('Loading Enemies');
 
-    await this.calculateRotateImagesAsync(imgEnemy_Basic).then(images => {
+    await this.calculateRotateImagesAsync('./assets/enemies/basic-enemy.png').then(images => {
       this.enemies = [{ name: 'BasicEnemy', images }];
     });
 
@@ -91,7 +91,7 @@ export class ImageService {
     const bulletTypes = [
       { type: ProjectileType.Bullet, path: './assets/bullets/basic-bullet.png', width: 50, height: 50 },
       { type: ProjectileType.Rocket, path: './assets/bullets/basic-rocket.png', width: 50, height: 50 },
-      { type: ProjectileType.NuclearBullet, path: './assets/bullets/nuclear-bullet.png', width: 50, height: 50 },
+      { type: ProjectileType.NuclearBullet, path: './assets/bullets/nuclear-bullet-min.png', width: 50, height: 50 },
       { type: ProjectileType.Laser, path: './assets/bullets/laser-beam.png', width: 32, height: 32 },
       { type: ProjectileType.SlowRocket, path: './assets/bullets/big-rocket.png', width: 50, height: 50 },
     ];
@@ -218,19 +218,29 @@ export class ImageService {
 
   public async calculateRotateImagesAsync(imagesrc: string, drawheight = 50, drawwidth = 50): Promise<ImageBitmap[]> {
     return new Promise<ImageBitmap[]>((resolve, reject) => {
-      const offscreenCanvas = new OffscreenCanvas(drawheight, drawwidth);
-      const imageCtx = offscreenCanvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
       const images: ImageBitmap[] = [];
       const image = new Image();
 
       image.onload = async () => {
+        await image.decode();
         for (let i = 0; i < 360; i++) {
+          const offscreenCanvas = new OffscreenCanvas(drawheight, drawwidth);
+          const imageCtx = offscreenCanvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
+
           imageCtx.clearRect(0, 0, drawheight, drawwidth);
           imageCtx.save();
           imageCtx.translate(drawheight / 2, drawwidth / 2);
           imageCtx.rotate(i * TO_RADIANS);
           imageCtx.drawImage(image, -(drawheight / 2), -(drawwidth / 2), drawheight, drawwidth);
           imageCtx.restore();
+
+          //const imageData = imageCtx.getImageData(0, 0, drawwidth, drawheight).data;
+
+          //Check if imageData has data
+
+          //if (!imageData.some(data => data !== 0)) {
+          //  console.log('No Data for image at angle: ', imagesrc, i);
+          //}
 
           const imageBitmap = await createImageBitmap(offscreenCanvas);
           images.push(imageBitmap);
@@ -245,8 +255,6 @@ export class ImageService {
   }
 }
 
-const imgEnemy_Basic =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABaUlEQVRoQ+2ZTRLCIAyFy7KrnscZj+HGS3gAD+ABvIQbj+GM5+mqSxypZSpQIJA4No1LoYEv7yX0RzVMfooJRyMg/6akKLIVRTQxqOckKmvp4UGD0u5NXAGBppePtW671oM/PoegLaBZCs0nqxEBKZRHFEkkTrOxVgSUxAXYQU3b1adukUNd+2kMdW3MYDoG4JJ9gNDWxwoEgrCSjOqg7AEjSBEENkwtSBUEJsymQewNIaS4Uwf2rJsV1Q1EkbG1dmNrVX0fbbOpjYe62HA5mL/b890bTsXLAfkCsL4mBHE37YAF97wpkClBq7eWq/Tqiz1Ub3KOzLOCcd+VU+ypzlelCgZE0cGzQFUEgwWBCWLOSshJjwmBDWJgODxYzV0Xe0GHUZeew0mCvpVh8/JBQFLNfmFcrJVIHJ8aKXRI7mXyoSc3U/bZhc2nNyg5cP7PrAXcV/10qvZbvzNgBAEBJox8uihCnmLgAi/Wd5ozikmVGAAAAABJRU5ErkJgggAA';
 const imgSurrounderSrc =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAA2klEQVRoQ+2aywrCMBBFbygogj/kzk935w8JolAiXQRKfUAwY2/kdJNdyeSeOVlMUpbyfZQ2g9Tzmm6jcu9FTPtPJGKG41Mix6t02knu67IdXvaIexFlf/NiSMQBv6pEtoOSDL7DRXl+eNU9ct57FDLdd8veJZE1CSOR0lj0SGMOsVZRHfdIY7SwFtZqjFT5HdbCWkFoYS2sFYQW1sJaQWhhLawVhBbWwlpBaGEtrBWEFtbCWkFofW0t18Fo9cTKYVb47jCrJlYk8oNHBx8T6fWBDa+D3JL7m0Qe7HvOOT05TSIAAAAASUVORK5CYII=';
 const imgBlackTransparentSrc =
