@@ -48,14 +48,14 @@ export class AppComponent implements OnInit {
         timer(0)
           .pipe(
             expand(() => timer(getRandomInterval()).pipe(take(1))),
-            take(100)
+            take(1000)
           )
           .subscribe(() => {
-            this.enemyService.createEnemyTank(0, 1, 0);
+            this.enemyService.createEnemyTank(10, 1, 0);
           });
 
         function getRandomInterval(): number {
-          return Math.floor(Math.random() * (5000 - 200 + 1)) + 200;
+          return Math.floor(Math.random() * (1500 - 200 + 1)) + 200;
         }
       });
   }

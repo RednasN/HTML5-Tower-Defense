@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { EnemyTank } from '../../models/enemies/enemy-tank.model';
 import { ExplosionService } from '../explosions/explosion.service';
 import { CanvasService } from '../game/canvas.service';
+import { GameStateService } from '../game/game-state.service';
 import { ImageService } from '../game/image.service';
 
 import { EnemyTankService } from './enemy-tank.service';
@@ -16,6 +17,8 @@ export class EnemyService {
 
   private readonly enemyTankService = inject(EnemyTankService);
   private readonly explosionService = inject(ExplosionService);
+
+  private readonly gameState = inject(GameStateService);
 
   public enemies: EnemyTank[] = [];
 
@@ -35,6 +38,7 @@ export class EnemyService {
       if (enemy.lives <= 0) {
         if (!enemy.died) {
           this.explosionService.createDefaultExplosion(enemy.drawx, enemy.drawy, 0);
+          this.gameState.addReward(enemy.reward);
           enemy.died = true;
         }
 
