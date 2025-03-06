@@ -58,17 +58,15 @@ const DEFAULT_UPGRADE_OPTIONS = [
 export class BuildTowerDialogComponent implements OnInit {
   private readonly towerService = inject(TowerService);
   private readonly gridService = inject(GridService);
-
   private readonly dialogRef = inject(MatDialogRef<BuildTowerDialogComponent>);
 
   public turrets: Turret[] = [];
-
   public totalCost: number | null = null;
-
-  public upgradeOptions: UpgradeDetails[] = cloneDefaultUpgradeOptions();
+  public upgradeOptions: UpgradeDetails[] = [];
 
   public ngOnInit(): void {
     this.createTowerOptions();
+    this.resetToDefaultUpgradeOptions();
   }
 
   public upgrade(option: UpgradeDetails): void {
@@ -82,8 +80,7 @@ export class BuildTowerDialogComponent implements OnInit {
     this.turrets.forEach(t => (t.selected = false));
     turret.selected = true;
 
-    this.upgradeOptions = cloneDefaultUpgradeOptions();
-
+    this.resetToDefaultUpgradeOptions();
     this.updateUpgradeOptions();
   }
 
@@ -93,18 +90,24 @@ export class BuildTowerDialogComponent implements OnInit {
 
   public buildTower(): void {
     const selectedTurret = this.turrets.find(turret => turret.selected);
-
-    if (!selectedTurret) {
-      return;
-    }
-
-    const speedLevel = this.upgradeOptions.find(option => option.type === UpgradeType.Speed)!.level;
-    const powerLevel = this.upgradeOptions.find(option => option.type === UpgradeType.Damage)!.level;
-    const rangeLevel = this.upgradeOptions.find(option => option.type === UpgradeType.Range)!.level;
+    if (!selectedTurret) return;
 
     const selectedCell = this.gridService.selectedCell;
+    if (!selectedCell) return;
 
-    this.towerService.createTower(selectedTurret.type, selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
+    const upgradeLevels = this.upgradeOptions.reduce(
+      (levels, option) => ({ ...levels, [option.type]: option.level }),
+      {} as Record<UpgradeType, number>
+    );
+
+    this.towerService.createTower(
+      selectedTurret.type,
+      selectedCell.x,
+      selectedCell.y,
+      upgradeLevels[UpgradeType.Speed] ?? 1,
+      upgradeLevels[UpgradeType.Damage] ?? 1,
+      upgradeLevels[UpgradeType.Range] ?? 1
+    );
 
     this.dialogRef.close();
   }
@@ -156,8 +159,8 @@ export class BuildTowerDialogComponent implements OnInit {
     currentStats.upgradeCost = nextUpgrade?.cost;
     currentStats.currentCost = currentUpgrades.reduce((acc, x) => acc + x.cost, 0);
   }
-}
 
-function cloneDefaultUpgradeOptions(): UpgradeDetails[] {
-  return DEFAULT_UPGRADE_OPTIONS.map(option => ({ ...option }));
+  private resetToDefaultUpgradeOptions(): void {
+    this.upgradeOptions = DEFAULT_UPGRADE_OPTIONS.map(option => ({ ...option }));
+  }
 }
