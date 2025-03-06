@@ -40,7 +40,7 @@ jobs:
       - name: Install Angular CLI
         run: npm install -g @angular/cli
       - name: Build
-        run: npx ng build --configuration production --base-href /HTML5-Tower-Defense/
+        run: npx ng build --configuration production --base-href /Tower-Defense/
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact

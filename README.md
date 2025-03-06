@@ -1,6 +1,6 @@
 # HTML5 Tower Defense
 
-A classic tower defense game, currently it's a very minimal game. It works best on mobile environments or touch enabled emulation environments (e.g. Google Chrome developer mode supports this). A live demo can be found here: [**live demo**](https://rednasn.github.io/HTML5-Tower-Defense/).
+A classic tower defense game, currently it's a very minimal game. It works best on mobile environments or touch enabled emulation environments (e.g. Google Chrome developer mode supports this). A live demo can be found here: [**live demo**](https://rednasn.github.io/Tower-Defense/).
 
 ## Setup locally
 
@@ -11,8 +11,8 @@ A classic tower defense game, currently it's a very minimal game. It works best 
    Clone this project repository to your local machine using Git or download it directly as a ZIP file and extract it.
 
    ```bash
-   git clone https://github.com/rednasn/HTML5-Tower-Defense.git
-   cd HTML5-Tower-Defense``
+   git clone https://github.com/rednasn/Tower-Defense.git
+   cd Tower-Defense``
 
    ```
 
