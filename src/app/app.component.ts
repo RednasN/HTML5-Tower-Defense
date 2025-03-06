@@ -7,7 +7,6 @@ import { Observable, expand, take, timer } from 'rxjs';
 import { BuildTowerDialogComponent } from './components/build-tower-dialog/build-tower-dialog.component';
 import { GameCanvasComponent } from './components/game-canvas/game-canvas.component';
 import { EnemyService } from './services/enemies/enemy.service';
-import { CanvasService } from './services/game/canvas.service';
 import { GameLoopService } from './services/game/game-loop.service';
 import { GameStateService } from './services/game/game-state.service';
 import { GridService } from './services/game/grid.service';
@@ -29,12 +28,10 @@ export class AppComponent implements OnInit {
   private readonly gameLoopService = inject(GameLoopService);
   private readonly enemyService = inject(EnemyService);
   private readonly dialog = inject(MatDialog);
-  private readonly canvasService = inject(CanvasService);
 
   private readonly gameState = inject(GameStateService);
 
   public ngOnInit(): void {
-    //const setupImages$ = from(
     this.imageService
       .setupTowers()
       .then(() => this.imageService.setupEnemies())

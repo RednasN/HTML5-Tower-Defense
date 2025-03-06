@@ -19,6 +19,7 @@ export type UpgradeDetails = {
 };
 
 export type TurretConfig = {
+  imageSrc: string;
   cost: number;
   type: WeaponType;
   upgrades: UpgradeDetails[];
@@ -47,6 +48,7 @@ export const basicEnemyConfig: EnemyConfig = {
 
 export const rocketLauncherConfig: TurretConfig = {
   type: WeaponType.RocketLauncher,
+  imageSrc: './assets/turrets/rocket-launcher-basic.png',
   cost: 25,
   upgrades: [
     {
@@ -84,6 +86,7 @@ export const rocketLauncherConfig: TurretConfig = {
 
 export const bulletShooterConfig: TurretConfig = {
   type: WeaponType.BulletShooter,
+  imageSrc: './assets/turrets/turret.png',
   cost: 25,
   upgrades: [
     {
@@ -121,6 +124,7 @@ export const bulletShooterConfig: TurretConfig = {
 
 export const laserTurretConfig: TurretConfig = {
   type: WeaponType.LaserTurret,
+  imageSrc: './assets/turrets/laser-shooter.png',
   cost: 25,
   upgrades: [
     {
@@ -158,6 +162,7 @@ export const laserTurretConfig: TurretConfig = {
 
 export const slowRocketLauncherConfig: TurretConfig = {
   type: WeaponType.SlowRocketLauncher,
+  imageSrc: './assets/turrets/slow-turret.png',
   cost: 25,
   upgrades: [
     {
@@ -196,6 +201,7 @@ export const slowRocketLauncherConfig: TurretConfig = {
 export const nuclearLauncherConfig: TurretConfig = {
   type: WeaponType.NuclearLauncher,
   cost: 25,
+  imageSrc: './assets/turrets/nuclear-turret.png',
   upgrades: [
     {
       type: UpgradeType.Range,
@@ -229,6 +235,10 @@ export const nuclearLauncherConfig: TurretConfig = {
     },
   ],
 };
+
+export function getTurretConfigs(): TurretConfig[] {
+  return [bulletShooterConfig, rocketLauncherConfig, laserTurretConfig, nuclearLauncherConfig, slowRocketLauncherConfig];
+}
 
 export function getTurretConfig(type: WeaponType): TurretConfig {
   switch (type) {

@@ -9,8 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { UpgradeType, getTurretConfig } from '../../models/configs/turret-config.model';
-import { WeaponType } from '../../models/weapons/weapon.model';
+import { TurretConfig, UpgradeType, getTurretConfig, getTurretConfigs } from '../../models/configs/turret-config.model';
 import { GridService } from '../../services/game/grid.service';
 import { TowerService } from '../../services/towers/tower.service';
 import { ProgressionCircleComponent } from '../progression-circle/progression-circle.component';
@@ -20,15 +19,20 @@ type UpgradeDetails = {
   type: UpgradeType;
   icon: string;
   level: number;
+  currentCost?: number;
   upgradeCost?: number;
 };
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type Turret = {
-  image: string;
+export type Turret = TurretConfig & {
   selected: boolean;
-  type: WeaponType;
 };
+
+const DEFAULT_UPGRADE_OPTIONS = [
+  { type: UpgradeType.Speed, icon: './assets/speed.png', level: 1 },
+  { type: UpgradeType.Damage, icon: './assets/power.png', level: 1 },
+  { type: UpgradeType.Range, icon: './assets/range.png', level: 1 },
+];
 
 @Component({
   selector: 'app-build-tower-dialog',
@@ -59,11 +63,9 @@ export class BuildTowerDialogComponent implements OnInit {
 
   public turrets: Turret[] = [];
 
-  public upgradeOptions: UpgradeDetails[] = [
-    { type: UpgradeType.Speed, icon: './assets/speed.png', level: 1 },
-    { type: UpgradeType.Damage, icon: './assets/power.png', level: 1 },
-    { type: UpgradeType.Range, icon: './assets/range.png', level: 1 },
-  ];
+  public totalCost: number | null = null;
+
+  public upgradeOptions: UpgradeDetails[] = cloneDefaultUpgradeOptions();
 
   public ngOnInit(): void {
     this.createTowerOptions();
@@ -80,6 +82,8 @@ export class BuildTowerDialogComponent implements OnInit {
     this.turrets.forEach(t => (t.selected = false));
     turret.selected = true;
 
+    this.upgradeOptions = cloneDefaultUpgradeOptions();
+
     this.updateUpgradeOptions();
   }
 
@@ -88,66 +92,72 @@ export class BuildTowerDialogComponent implements OnInit {
   }
 
   public buildTower(): void {
-    const speedLevel = this.upgradeOptions.find(option => option.type === UpgradeType.Speed)!.level;
-    const powerLevel = this.upgradeOptions.find(option => option.type === UpgradeType.Damage)!.level;
-    const rangeLevel = this.upgradeOptions.find(option => option.type === UpgradeType.Range)!.level;
-
     const selectedTurret = this.turrets.find(turret => turret.selected);
 
     if (!selectedTurret) {
       return;
     }
+
+    const speedLevel = this.upgradeOptions.find(option => option.type === UpgradeType.Speed)!.level;
+    const powerLevel = this.upgradeOptions.find(option => option.type === UpgradeType.Damage)!.level;
+    const rangeLevel = this.upgradeOptions.find(option => option.type === UpgradeType.Range)!.level;
+
     const selectedCell = this.gridService.selectedCell;
 
-    if (selectedTurret.type === WeaponType.BulletShooter) {
-      this.towerService.createBulletShooter(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
-    } else if (selectedTurret.type === WeaponType.RocketLauncher) {
-      this.towerService.createRocketLauncher(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
-    } else if (selectedTurret.type === WeaponType.LaserTurret) {
-      this.towerService.createLaserTurret(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
-    } else if (selectedTurret.type === WeaponType.NuclearLauncher) {
-      this.towerService.createNuclearLauncher(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
-    } else if (selectedTurret.type === WeaponType.SlowRocketLauncher) {
-      this.towerService.createSlowRocketLauncher(selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
-    }
+    this.towerService.createTower(selectedTurret.type, selectedCell!.x, selectedCell!.y, speedLevel, powerLevel, rangeLevel);
 
     this.dialogRef.close();
   }
 
   private createTowerOptions(): void {
-    this.turrets = [
-      { type: WeaponType.BulletShooter, image: './assets/turrets/turret.png', selected: false },
-      { type: WeaponType.RocketLauncher, image: './assets/turrets/rocket-launcher-basic.png', selected: false },
-      { type: WeaponType.NuclearLauncher, image: './assets/turrets/nuclear-turret.png', selected: false },
-      // { type: WeaponType.MultiRocketLauncher, image: './assets/turrets/multi-rocket-launcher.png', selected: false, imageIndex: 3 },
-      { type: WeaponType.LaserTurret, image: './assets/turrets/laser-shooter.png', selected: false },
-      { type: WeaponType.SlowRocketLauncher, image: './assets/turrets/slow-turret.png', selected: false },
-    ];
+    this.turrets = getTurretConfigs().map(turret => {
+      return {
+        ...turret,
+        selected: false,
+      };
+    });
+  }
+
+  private calculateTotalCost(): void {
+    const towerCost = this.turrets.find(turret => turret.selected)?.cost;
+
+    if (!towerCost) {
+      this.totalCost = null;
+    }
+
+    const upgradeCosts = this.upgradeOptions.reduce((acc, option) => acc + option.currentCost!, 0);
+
+    this.totalCost = upgradeCosts + towerCost!;
   }
 
   private updateUpgradeOptions(): void {
     const selectedTurret = this.turrets.find(x => x.selected);
-    const turretConfig = getTurretConfig(selectedTurret!.type);
+    if (!selectedTurret) return;
 
-    const currentSpeedStats = this.upgradeOptions.find(x => x.type === UpgradeType.Speed);
-    const speedUpgradeOption = turretConfig.upgrades
-      .find(x => x.type === UpgradeType.Speed)!
-      .details.find(x => x.level === currentSpeedStats!.level + 1);
+    const turretConfig = getTurretConfig(selectedTurret.type);
 
-    currentSpeedStats!.upgradeCost = speedUpgradeOption?.cost;
+    for (const upgradeType of [UpgradeType.Speed, UpgradeType.Damage, UpgradeType.Range]) {
+      this.processUpgradeOption(upgradeType, turretConfig);
+    }
 
-    const currentDamageStats = this.upgradeOptions.find(x => x.type === UpgradeType.Damage);
-    const damageUpgradeOption = turretConfig.upgrades
-      .find(x => x.type === UpgradeType.Damage)!
-      .details.find(x => x.level === currentDamageStats!.level + 1);
-
-    currentDamageStats!.upgradeCost = damageUpgradeOption?.cost;
-
-    const currentRangeStats = this.upgradeOptions.find(x => x.type === UpgradeType.Range);
-    const rangeUpgradeOption = turretConfig.upgrades
-      .find(x => x.type === UpgradeType.Range)!
-      .details.find(x => x.level === currentRangeStats!.level + 1);
-
-    currentRangeStats!.upgradeCost = rangeUpgradeOption?.cost;
+    this.calculateTotalCost();
   }
+
+  private processUpgradeOption(upgradeType: UpgradeType, turretConfig: TurretConfig): void {
+    const currentStats = this.upgradeOptions.find(x => x.type === upgradeType);
+    if (!currentStats) return;
+
+    const upgradeConfig = turretConfig.upgrades.find(x => x.type === upgradeType);
+    if (!upgradeConfig) return;
+
+    const nextUpgrade = upgradeConfig.details.find(x => x.level === currentStats.level + 1);
+    const currentUpgrades = upgradeConfig.details.filter(x => x.level <= currentStats.level);
+
+    currentStats.upgradeCost = nextUpgrade?.cost;
+    currentStats.currentCost = currentUpgrades.reduce((acc, x) => acc + x.cost, 0);
+  }
+}
+
+function cloneDefaultUpgradeOptions(): UpgradeDetails[] {
+  return DEFAULT_UPGRADE_OPTIONS.map(option => ({ ...option }));
 }

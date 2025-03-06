@@ -6,9 +6,17 @@
     <div class="turret-container">
       <p>Select a tower</p>
 
-      @for (item of turrets; track item.type) {
-        <img (click)="selectTurret(item)" [class.not-selected]="!item.selected" [src]="item.image" alt="{{ item.type }}" />
-      }
+      <div class="turret-list">
+        @for (item of turrets; track item.type) {
+          <div [class.not-selected]="!item.selected">
+            <img (click)="selectTurret(item)" class="turret-image" [src]="item.imageSrc" alt="{{ item.type }}" />
+            <div class="upgrade-info">
+              <img src="./assets/money.png" width="15" height="15" alt="Money" />
+              <span>{{ item.cost }}</span>
+            </div>
+          </div>
+        }
+      </div>
     </div>
     <div class="upgrades">
       <p>Upgrade Options</p>
@@ -25,6 +33,11 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="total-cost">
+    <span>Total:</span>
+    <img src="./assets/money.png" width="15" height="15" alt="Money" />
+    <span>{{ totalCost ?? '-' }}</span>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>

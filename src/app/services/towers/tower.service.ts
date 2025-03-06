@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 
 import {
   Weapon,
+  WeaponType,
   isBulletShooter,
   isLaserTurret,
   isNucleareLauncher,
@@ -32,31 +33,6 @@ export class TowerService {
 
   private weapons: Weapon[] = [];
 
-  public createBulletShooter(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
-    const basicTurret = this.basicTurretService.create(x, y, speedLevel, powerLevel, rangeLevel);
-    this.weapons.push(basicTurret);
-  }
-
-  public createNuclearLauncher(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
-    const nuclearlauncher = this.nuclearlauncherService.create(x, y, speedLevel, powerLevel, rangeLevel);
-    this.weapons.push(nuclearlauncher);
-  }
-
-  public createRocketLauncher(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
-    const rocketLauncher = this.rocketLauncherService.create(x, y, speedLevel, powerLevel, rangeLevel);
-    this.weapons.push(rocketLauncher);
-  }
-
-  public createLaserTurret(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
-    const laserTurret = this.laserTurretService.create(x, y, speedLevel, powerLevel, rangeLevel);
-    this.weapons.push(laserTurret);
-  }
-
-  public createSlowRocketLauncher(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
-    const laserTurret = this.slowRocketLauncherService.create(x, y, speedLevel, powerLevel, rangeLevel);
-    this.weapons.push(laserTurret);
-  }
-
   public calculate(): void {
     this.weapons.forEach(weapon => {
       if (isRocketLauncher(weapon)) {
@@ -81,5 +57,52 @@ export class TowerService {
         console.log('Error!', err);
       }
     });
+  }
+
+  public createTower(type: WeaponType, x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
+    switch (type) {
+      case WeaponType.BulletShooter:
+        this.createBulletShooter(x, y, speedLevel, powerLevel, rangeLevel);
+        break;
+      case WeaponType.RocketLauncher:
+        this.createRocketLauncher(x, y, speedLevel, powerLevel, rangeLevel);
+        break;
+      case WeaponType.LaserTurret:
+        this.createLaserTurret(x, y, speedLevel, powerLevel, rangeLevel);
+        break;
+      case WeaponType.NuclearLauncher:
+        this.createNuclearLauncher(x, y, speedLevel, powerLevel, rangeLevel);
+        break;
+      case WeaponType.SlowRocketLauncher:
+        this.createSlowRocketLauncher(x, y, speedLevel, powerLevel, rangeLevel);
+        break;
+      default:
+        throw new Error('Invalid turret type');
+    }
+  }
+
+  private createBulletShooter(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
+    const basicTurret = this.basicTurretService.create(x, y, speedLevel, powerLevel, rangeLevel);
+    this.weapons.push(basicTurret);
+  }
+
+  private createNuclearLauncher(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
+    const nuclearlauncher = this.nuclearlauncherService.create(x, y, speedLevel, powerLevel, rangeLevel);
+    this.weapons.push(nuclearlauncher);
+  }
+
+  private createRocketLauncher(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
+    const rocketLauncher = this.rocketLauncherService.create(x, y, speedLevel, powerLevel, rangeLevel);
+    this.weapons.push(rocketLauncher);
+  }
+
+  private createLaserTurret(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
+    const laserTurret = this.laserTurretService.create(x, y, speedLevel, powerLevel, rangeLevel);
+    this.weapons.push(laserTurret);
+  }
+
+  private createSlowRocketLauncher(x: number, y: number, speedLevel: number, powerLevel: number, rangeLevel: number): void {
+    const laserTurret = this.slowRocketLauncherService.create(x, y, speedLevel, powerLevel, rangeLevel);
+    this.weapons.push(laserTurret);
   }
 }

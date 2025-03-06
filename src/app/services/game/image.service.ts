@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { TO_RADIANS } from '../../models/constants';
 import { RotateImage } from '../../models/image.model';
 import { ProjectileType } from '../../models/projectiles/projectile.model';
 import { WeaponType } from '../../models/weapons/weapon.model';
@@ -9,9 +8,6 @@ import { WeaponType } from '../../models/weapons/weapon.model';
   providedIn: 'root',
 })
 export class ImageService {
-  //public towers: RotateImage[] = [];
-  //public bullets: RotateImage[] = [];
-
   public towers: Record<WeaponType, ImageBitmap[]> = {
     [WeaponType.Base]: [],
     [WeaponType.RocketLauncher]: [],
@@ -114,62 +110,32 @@ export class ImageService {
     this.imgBlackTransparent = await this.calculateImage(imgSurrounderSrc);
   }
 
-  public setImageValue(imageBase64: string): Promise<ImageBitmap> {
-    const image = new Image();
+  public async setImageValue(imageBase64: string): Promise<ImageBitmap> {
+    const response = await fetch(imageBase64);
 
-    const offscreenCanvas = new OffscreenCanvas(50, 50);
-    const imageCtx = offscreenCanvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
+    const imgBlob = await response.blob();
+    const image = await createImageBitmap(imgBlob);
 
-    if (!imageCtx) {
-      throw new Error('Canvas context or canvas is not initialized.');
-    }
-    return new Promise((resolve, reject) => {
-      image.onload = async function () {
-        imageCtx.clearRect(0, 0, 50, 50);
-        imageCtx.save();
-        imageCtx.drawImage(image, 0, 0, 50, 50);
-        imageCtx.restore();
-
-        const imageBitmap = await createImageBitmap(offscreenCanvas);
-        resolve(imageBitmap);
-      };
-
-      image.onerror = error => {
-        reject(new Error('Error loading source image: ' + error));
-      };
-
-      image.src = imageBase64;
-    });
+    return image;
   }
 
   public async calculateImage(imagesrc: string): Promise<ImageBitmap> {
-    const image = new Image();
+    const response = await fetch(imagesrc);
+
+    const imgBlob = await response.blob();
+    const image = await createImageBitmap(imgBlob);
 
     const offscreenCanvas = new OffscreenCanvas(50, 50);
     const imageCtx = offscreenCanvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
 
-    if (!imageCtx) {
-      throw new Error('Canvas context or canvas is not initialized.');
-    }
+    imageCtx.clearRect(0, 0, 50, 50);
+    imageCtx.save();
+    imageCtx.drawImage(image, 0, 0, 50, 50);
+    imageCtx.restore();
 
-    return new Promise((resolve, reject) => {
-      image.onload = async () => {
-        imageCtx.clearRect(0, 0, 50, 50);
-        imageCtx.save();
-        imageCtx.drawImage(image, 0, 0, 50, 50);
-        imageCtx.restore();
+    const newImageBitMap = await createImageBitmap(offscreenCanvas);
 
-        const imageBitmap = await createImageBitmap(offscreenCanvas);
-
-        resolve(imageBitmap);
-      };
-
-      image.onerror = error => {
-        reject(new Error('Error loading source image: ' + error));
-      };
-
-      image.src = imagesrc;
-    });
+    return newImageBitMap;
   }
 
   public async calculateSpriteAnimations(
@@ -217,41 +183,31 @@ export class ImageService {
   }
 
   public async calculateRotateImagesAsync(imagesrc: string, drawheight = 50, drawwidth = 50): Promise<ImageBitmap[]> {
-    return new Promise<ImageBitmap[]>((resolve, reject) => {
-      const images: ImageBitmap[] = [];
-      const image = new Image();
+    const response = await fetch(imagesrc);
+    const imgBlob = await response.blob();
+    const image = await createImageBitmap(imgBlob);
 
-      image.onload = async () => {
-        await image.decode();
-        for (let i = 0; i < 360; i++) {
-          const offscreenCanvas = new OffscreenCanvas(drawheight, drawwidth);
-          const imageCtx = offscreenCanvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
+    const offscreen = new OffscreenCanvas(drawwidth, drawheight);
 
-          imageCtx.clearRect(0, 0, drawheight, drawwidth);
-          imageCtx.save();
-          imageCtx.translate(drawheight / 2, drawwidth / 2);
-          imageCtx.rotate(i * TO_RADIANS);
-          imageCtx.drawImage(image, -(drawheight / 2), -(drawwidth / 2), drawheight, drawwidth);
-          imageCtx.restore();
+    const ctx = offscreen.getContext('2d', { willReadFrequently: true });
 
-          //const imageData = imageCtx.getImageData(0, 0, drawwidth, drawheight).data;
+    if (!ctx) throw new Error('Could not get OffscreenCanvas 2D context');
 
-          //Check if imageData has data
+    const rotations: Promise<ImageBitmap>[] = [];
 
-          //if (!imageData.some(data => data !== 0)) {
-          //  console.log('No Data for image at angle: ', imagesrc, i);
-          //}
+    for (let i = 0; i < 360; i++) {
+      ctx.clearRect(0, 0, drawwidth, drawheight);
+      ctx.translate(drawwidth / 2, drawheight / 2);
+      ctx.rotate((i * Math.PI) / 180);
+      ctx.drawImage(image, -drawwidth / 2, -drawheight / 2, drawwidth, drawheight);
+      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
 
-          const imageBitmap = await createImageBitmap(offscreenCanvas);
-          images.push(imageBitmap);
-        }
+      // Extract image data & create bitmap
+      const imageData = ctx.getImageData(0, 0, drawwidth, drawheight);
+      rotations.push(createImageBitmap(imageData));
+    }
 
-        resolve(images);
-      };
-
-      image.onerror = err => reject(err);
-      image.src = imagesrc;
-    });
+    return Promise.all(rotations);
   }
 }
 
