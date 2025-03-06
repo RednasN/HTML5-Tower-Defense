@@ -2,6 +2,8 @@
 
 A classic tower defense game, currently it's a very minimal game. It works best on mobile environments or touch enabled emulation environments (e.g. Google Chrome developer mode supports this). A live demo can be found here: [**live demo**](https://rednasn.github.io/Tower-Defense/).
 
+<img width="859" alt="tower-defense-in-game" src="https://github.com/user-attachments/assets/e24a5210-e42c-4972-abfb-2aaaf707660d" />
+
 ## Setup locally
 
 1. **Install Node.js and npm**  
